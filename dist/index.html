@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>反假冒 - 商品报告</title>
+    <link href="images/farvirate.ico" rel="shortcut icon" type="image/icon">
+    <link type="text/css" rel="stylesheet" href="styles/base.css">
+    <link type="text/css" rel="stylesheet" href="styles/entry.css">
+    <script type="text/javascript">// var g_BACKEND_API_BASE_URL = '';
+      var g_BACKEND_API_BASE_URL = 'https://bps-mynodesql-api.blcksync.info:444/v0';
+      
+    </script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+  </head>
+  <body>
+    <div id="pagewrap" v-cloak>
+      <div class="topbar">
+        <div class="brand-logo"><img src="assets/logo-white.png"></div>
+        <div class="topbar-nav">
+          <button class="btn-language" type="button" v-on:click="onLangButtonClicked" v-bind:class="[('cn' === viewState.lang) ? 'btn-lan-en' : 'btn-lan-zh']"></button><a class="link-signout hidden" v-if="!renderForCurrentHtml" v-on:click="onLoginout" v-bind:class="[('cn' === viewState.lang) ? 'btn-show' : '']">退出登录</a><a class="link-signout hidden" v-if="!renderForCurrentHtml" v-on:click="onLoginout" v-bind:class="[('cn' === viewState.lang) ? '' : 'btn-show']">Log off</a>
+        </div>
+      </div>
+      <!-- /topbar-->
+      <router-view v-if="renderForCurrentHtml" :lang="viewState.lang" :locale="localeForCurrentRoute" v-on:request-data="onRequestData" v-on:request-launch="onRequestLaunch" v-on:request-export="onRequestExport" v-on:request-upload="onRequestUpload"></router-view>
+      <div class="contentWarp" v-if="!renderForCurrentHtml">
+        <div class="sidebar">
+          <div class="sidebar-header" v-bind:class="viewState.currentMenuId">
+            <h2>{{ viewState.currentTitle }}</h2>
+          </div>
+          <div class="sidebar-menu">
+            <vc-vertmenu :model="viewModel.sideMenu" :locale="viewModel.locales[viewState.lang].sidemenu"></vc-vertmenu>
+          </div>
+        </div>
+        <!-- /sidebar-->
+        <div class="main-content">
+          <div class="main-content-topbg"></div>
+          <!--.main-content-body-->
+          <router-view :lang="viewState.lang" :locale="localeForCurrentRoute" :shared-locale="currentLocale.shared" v-on:request-data="onRequestData" v-on:request-launch="onRequestLaunch" v-on:request-export="onRequestExport" v-on:request-upload="onRequestUpload"></router-view>
+        </div>
+        <!-- /main-content-->
+      </div>
+      <footer v-if="renderForCurrentHtml">
+        <p class="footer-info">Copyright © 2016 - 2028 Beschannels. All Rights Reserved 京ICP备17006100号</p>
+        <!-- /footer-->
+        <!-- #pagewrap-->
+        <script></script>
+      </footer>
+    </div>
+  </body>
+</html>

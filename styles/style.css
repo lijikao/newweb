@@ -1,0 +1,10 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.clear:after{display:block; content:"";clear:both; visibility:hidden; height:0;}   /*清除浮动*/

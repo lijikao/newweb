@@ -1,0 +1,96 @@
+{
+    "cn": {
+      "tableview": {
+        "caption": "配置",
+        "total_head": "共计",
+        "total_tail": "条",
+        "tabs": {
+          "tab_anticounterfeiting": "反假冒"
+        },
+        "fields": {
+          "code": "编码",
+          "Industry": "行业",
+          "Brand": "品牌",
+          "Category": "品类",
+          "series": "系列",
+          "model": "型号",
+          "channel": "渠道",
+          "level_name": "判定结果",
+          "believablity": "Believablity"
+        },
+        "buttons": {
+          "import": "导入数据",
+          "detail": "详情",
+          "export": "下载数据"
+        }
+      },
+      "uploadDialog": {
+        "title": "上传",
+        "caption": "请从电脑中选择需要导入的文件",
+        "description": "按模板格式输入数据（###模板下载###）,上传过程中请勿刷新或关闭浏览器",
+        "uploadButton": "上传",
+        "success": {
+          "icon": "assets/icons/icon_success.png",
+          "caption": "Successfully Imported",
+          "description": "Well done! Continue with your operation"
+        },
+        "failed": {
+          "icon": "assets/icons/icon_failure.png",
+          "caption": "Import failed",
+          "description": "Oops! There may be some problems with the imported data."
+        },
+        "progress": {
+          "icon": "assets/icons/icon_wait.png",
+          "caption": "Please wait...",
+          "description": "Data is being imported, please do not operate other"
+        }
+      }
+    },
+    "en": {
+      "tableview": {
+        "caption": "Configuration",
+        "total_head": "",
+        "total_tail": "records",
+        "tabs": {
+          "tab_anticounterfeiting": "Anti-counterfeiting"
+        },
+        "fields": {
+          "code": "No.",
+          "Industry": "industry",
+          "Brand": "brand",
+          "Category": "category",
+          "series": "series",
+          "model": "model",
+          "channel": "channel",
+          "level_name": "result",
+          "believablity": "believablity"
+        },
+        "buttons": {
+          "import": "import",
+          "detail": "detail",
+          "export": "download"
+        }
+      },
+      "uploadDialog": {
+        "title": "Check product import",
+        "caption": "Please select the file you want to import from your computer.",
+        "description": "Enter data in template format (###template download###), do not refresh or close the browser during the last process. Thank you.",
+        "uploadButton": "Upload",
+        "success": {
+          "icon": "assets/icons/icon_success.png",
+          "caption": "Successfully Imported",
+          "description": "Well done! Continue with your operation"
+        },
+        "failed": {
+          "icon": "assets/icons/icon_failure.png",
+          "caption": "Import failed",
+          "description": "Oops! There may be some problems with the imported data."
+        },
+        "progress": {
+          "icon": "assets/icons/icon_wait.png",
+          "caption": "Please wait...",
+          "description": "Data is being imported, please do not operate other"
+        }
+      }
+    }
+  }

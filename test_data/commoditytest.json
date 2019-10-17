@@ -1,0 +1,77 @@
+{
+    "success": true,
+    "username": "abc",
+    "query": {
+        "keys": [
+            "channel",
+            "series",
+            "model"
+        ],
+        "start_date": "2018-10-30 00:00:00",
+        "end_date": "2018-12-30 00:00:00"
+    },
+    "results": {
+        "results": [
+            {
+                "p_identify_num": 118,
+                "level_name": "假货",
+                "score": 0.84138141,
+                "series": "Air max",
+                "model": "97",
+                "product_name": "耐克Nike Air Max Plus 97 香槟金大气垫男女休闲运动跑步鞋",
+                "url": "https://www.kaola.com/product/2274981.html",
+                "skumap": "颜色:狼灰/暗灰/白金色",
+                "channel": "考拉",
+                "collect_date": "2018-10-31T07:00:00.000Z",
+                "authorized_status": 1
+            },
+            {
+                "p_identify_num": 3096,
+                "level_name": "假货",
+                "score": 1,
+                "series": "vapormax",
+                "model": "其他",
+                "product_name": "    nike air vapormax x offwhite ow联名大气垫  原$厂级材质 恭喜你找到了源头 你买的专柜鞋 可能就混着我的货 ————————————&md...",
+                "url": "https://market.m.taobao.com/app/idleFish-F2e/widle-taobao-rax/page-detail?wh_weex=true&wx_navbar_transparent=true&id=573726843100&ut_sk=1.WWyF7FQn49UDAANlxIu8UqTX_21407387_1545390795562.Copy.detail.573726843100.null&forceFlush=1",
+                "skumap": "NULL",
+                "channel": "闲鱼",
+                "collect_date": "2018-12-30T03:19:08.000Z",
+                "authorized_status": 1
+            }
+        ],
+        "channel": [
+            {
+                "channel": "考拉",
+                "id": 0
+            },
+            {
+                "channel": "闲鱼",
+                "id": 1
+            }
+        ],
+        "series": [
+            {
+                "series": "Air max",
+                "id": 0
+            },
+            {
+                "series": "vapormax",
+                "id": 1
+            }
+        ],
+        "model": [
+            {
+                "model": "97",
+                "id": 0
+            },
+            {
+                "model": "270",
+                "id": 1
+            },
+            {
+                "model": "其他",
+                "id": 2
+            }
+        ]
+    }
+}

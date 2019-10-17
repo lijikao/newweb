@@ -1,0 +1,142 @@
+{
+    "cn": {
+      "section_chart": "概况统计",
+      "section_table": "检测报告",
+      "total_fakes": "假冒商品数",
+      "fakes_percent": "假冒商品占比",
+      "total_success": "下架成功商品数",
+      "tableview": {
+        "section_details": "详情",
+        "caption": "检测报告",
+        "total_head": "共计",
+        "total_tail": "条",
+        "tabs": {
+          "tab_all": "全部",
+          "tab_pending": "待投诉下架",
+          "tab_waiting": "待处理下架",
+          "tab_progress": "处理中",
+          "tab_success": "下架成功",
+          "tab_failed": "下架失败"
+        },
+        "fields": {
+          "ResultId": "编号",
+          "series": "系列",
+          "model": "型号",
+          "BrandNameList": "品牌",
+          "level_name": "判定结果",
+          "DiscriminantResult": "判定结果",
+          "ConfidenceLevelBucketName": "确信度",
+          "ProductDescription": "商品名及URL",
+          "Skumap": "参数",
+          "channel": "渠道",
+          "ChannelName": "渠道",
+          "DiscriminantTime": "判定时间",
+          "statusText": "状态",
+          "RightsProtectionStatus": "状态",
+          "RightsProtectionStartTime": "投诉时间"
+        },
+        "buttons": {
+          "feedback":"意见反馈",
+          "launch": "发起投诉",
+          "export": "下载数据"
+        }
+      },
+      "valuesMapping": {
+        "DiscriminantResult": {
+          "0": "假",
+          "1": "真"
+        },
+        "RightsProtectionStatus": {
+          "0": "",
+          "1": "待投诉下架",
+          "2": "待处理下架",
+          "3": "下架失败",
+          "4": "下架成功",
+          "5": "处理中"
+        }
+      },
+      "trendchart": {
+        "title": "假冒商品数量及趋势"
+      },
+      "piechart": {
+        "title": "各品牌假货统计",
+        "total": "总数"
+      },
+      "barchart1": {
+        "title": "各渠道真假货统计"
+      },
+      "barchart2": {
+        "title": "假货确信度统计"
+      }
+    },
+    "en": {
+      "section_chart": "Summary",
+      "section_table": "Discriminant Report",
+      "total_fakes": "Number of fakes",
+      "fakes_percent": "Percentage of fakes",
+      "total_success": "Number of take-down",
+      "tableview": {
+        "section_details": "Details",
+        "caption": "Discriminant Report",
+        "total_head": "",
+        "total_tail": "records",
+        "tabs": {
+          "tab_all": "All",
+          "tab_pending": "Pending initiation",
+          "tab_waiting": "Pending receipt",
+          "tab_progress": "In process",
+          "tab_success": "Completed",
+          "tab_failed": "Failed"
+        },
+        "fields": {
+          "ResultId": "No.",
+          "series": "series",
+          "model": "model",
+          "BrandNameList": "brand",
+          "level_name": "result",
+          "DiscriminantResult": "result",
+          "ConfidenceLevelBucketName": "confidence level",
+          "ProductDescription": "Product and URL",
+          "Skumap": "parameter",
+          "channel": "channel",
+          "ChannelName": "channel",
+          "DiscriminantTime": "time",
+          "statusText": "status",
+          "RightsProtectionStatus": "status",
+          "RightsProtectionStartTime": "Time of complain"
+        },
+        "buttons": {
+          "feedback":"feedback",
+          "launch": "initiate",
+          "export": "download"
+        }
+      },
+      "valuesMapping": {
+        "DiscriminantResult": {
+          "0": "Fake",
+          "1": "Real"
+        },
+        "RightsProtectionStatus": {
+          "0": "",
+          "1": "Pending initiation",
+          "2": "Pending receipt",
+          "3": "Failed",
+          "4": "Completed",
+          "5": "In process"
+        }
+      },
+      "trendchart": {
+        "title": "Trend of fakes"
+      },
+      "piechart": {
+        "title": "Fakes by brand",
+        "total": "Total"
+      },
+      "barchart1": {
+        "title": "Fakes by channel"
+      },
+      "barchart2": {
+        "title": "confidence level of fakes"
+      }
+    }
+  }

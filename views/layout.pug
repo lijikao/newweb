@@ -1,0 +1,44 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
+    title 反假冒 - 商品报告
+
+    block styles
+      link(href='images/farvirate.ico', rel='shortcut icon', type='image/icon')
+      link(type='text/css' rel="stylesheet" href='styles/base.css')
+
+    script(type='text/javascript').
+      var g_BACKEND_API_BASE_URL = '#{backendBaseUrl}';
+
+    block scripts
+        script(type='text/javascript', src='js/base.js')
+  body
+    #pagewrap
+      .topbar
+        .brand-logo
+          img(src='assets/logo-white.png')
+        .topbar-nav
+          button.btn-language(type='button' v-on:click="onLangButtonClicked" v-bind:class="[('cn' === viewState.lang) ? 'btn-lan-en' : 'btn-lan-zh']")
+          a.link-signout.hidden(href='#' v-bind:class="[('cn' === viewState.lang) ? 'btn-show' : '']") 退出登录
+          a.link-signout.hidden(href='#' v-bind:class="[('cn' === viewState.lang) ? '' : 'btn-show']") Log off
+      // /topbar
+      .sidebar
+        .sidebar-header(v-bind:class="viewState.currentMenuId")
+          h2 #{'{{ viewState.currentTitle }}'}
+        .sidebar-menu
+          block sidemenu
+      // /sidebar
+      .main-content
+        .main-content-topbg
+        //.main-content-body
+        block content
+
+      // /main-content
+      // #pagewrap
+      script.
+        //$(function () {
+        //$('.datetimeinput').daterangepicker();
+        //});

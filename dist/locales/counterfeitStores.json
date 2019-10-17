@@ -1,0 +1,60 @@
+{
+    "cn": {
+      "section_chart": "概况统计",
+      "section_table": "检测报告",
+      "fakes_shops_count": "售假店铺数",
+      "fakes_shops_percent": "售假店铺占比",
+      "tableview": {
+        "section_details": "详情",
+        "caption": "检测报告",
+        "total_head": "共计",
+        "total_tail": "条",
+        "fields": {
+          "resultid": "编码",
+          "ChannelName": "渠道",
+          "series": "系列",
+          "model": "型号",
+          "ShopName": "店铺名称",
+          "FakeProductNum": "假冒商品数",
+          "RightProctedLinkNum": "假冒商品链接数",
+          "succeeded_links": "下架成功链接数",
+          "RightsProtectionStartTime": "投诉时间"
+        },
+        "buttons": {
+          "export": "下载数据"
+        }
+      },
+      "trendchart": {
+        "title": "各渠道售假店铺统计"
+      }
+    },
+    "en": {
+      "section_chart": "Summary",
+      "section_table": "Discriminant Report",
+      "fakes_shops_count": "Number of fakes stores",
+      "fakes_shops_percent": "Percentage of fakes stores",
+      "tableview": {
+        "section_details": "Details",
+        "caption": "Discriminant Report",
+        "total_head": "",
+        "total_tail": "records",
+        "fields": {
+          "resultid": "No.",
+          "channel": "channel",
+          "series": "series",
+          "model": "model",
+          "ShopName": "store name",
+          "fake_products_count": "Number of fakes",
+          "fake_links_count": "Number of fake URLs",
+          "succeeded_links": "URLs take-down",
+          "RightsProtectionStartTime": "Time of complain"
+        },
+        "buttons": {
+          "export": "download"
+        }
+      },
+      "trendchart": {
+        "title": "Fakes stores by channel"
+      }
+    }
+  }

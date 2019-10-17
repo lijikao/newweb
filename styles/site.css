@@ -1,0 +1,389 @@
+::-webkit-input-placeholder {
+  color: #d6d6d6;
+  font-size: 10pt;
+}
+::-moz-placeholder {
+  color: #d6d6d6;
+  font-size: 10pt;
+}
+:-ms-input-placeholder {
+  color: #d6d6d6;
+  font-size: 10pt;
+}
+::placeholder {
+  color: #d6d6d6;
+  font-size: 10pt;
+}
+input[type="text"],
+input[type="password"] {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: normal;
+  font-size: 14pt;
+  border: 1px solid #D6D6D6;
+  border-radius: 2px;
+  color: #333333;
+}
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="text"]::-ms-input-placeholder,
+input[type="password"]::-ms-input-placeholder,
+input[type="text"]:-ms-input-placeholder,
+input[type="password"]:-ms-input-placeholder {
+  color: #999999;
+}
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border: 1px solid #7290F2;
+  color: #333333;
+}
+input[type="text"]:disabled,
+input[type="password"]:disabled {
+  border: 1px solid #cccccc;
+  background-color: #f5f5f5;
+  color: #999999;
+}
+input[type="checkbox"] {
+  display: none!important;
+}
+input[type="checkbox"] + label {
+  padding-bottom: 1px;
+}
+input[type="checkbox"] + label:before {
+  content: ' ';
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px solid #D6D6D6;
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+  margin-right: 10px;
+  cursor: pointer;
+}
+input[type="checkbox"]:checked + label:before {
+  color: #CD454A;
+  border: 1px solid #CD454A;
+  background: url('../assets/icons/icon_checkbox_checked.png') center center no-repeat;
+}
+input[type="checkbox"]:disabled + label:before {
+  border: 1px solid #D6D6D6;
+  background: #F5F5F5;
+}
+.main-table table {
+  border: 0px solid white;
+}
+.main-table table > thead > tr {
+  background-color: #F1F4F8;
+  color: #9AA3AC;
+}
+.main-table table > thead > tr > td {
+  cursor: pointer;
+  white-space: nowrap;
+  width: auto;
+}
+.main-table table > thead > tr > td > * {
+  display: inline-block;
+}
+.main-table table > thead > tr > td .sortable-col-head-icon {
+  width: 8px;
+  background: url('../assets/icons/icon_sortable.png') center center no-repeat;
+  background-size: contain;
+}
+.main-table table > tbody > tr {
+  background-color: white!important;
+}
+.main-table table > tbody .result0 {
+  color: #CC454A;
+}
+.main-table table > tbody .result1 {
+  color: #24CCB8;
+}
+.main-table table > tbody .status {
+  display: inline-block;
+  box-sizing: border-box;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 15px;
+  padding: 3px 10px 3px 10px;
+  white-space: nowrap;
+  height: auto;
+  width: auto;
+}
+.main-table table > tbody .status > span {
+  display: inline-block;
+}
+.main-table table > tbody .status.process {
+  background-color: #EAEFFD;
+  color: #7290F2;
+}
+.main-table table > tbody .status.failed {
+  background-color: #E8EAF6;
+  color: #A4AAD0;
+}
+.main-table table > tbody .status.completed {
+  background-color: #E4F8F6;
+  color: #24CCB8;
+}
+.main-table table > tbody .status.receipt {
+  background-color: #FEEFE6;
+  color: #F49256;
+}
+.main-table table > tbody .status.initiate {
+  background-color: #F8DDDA;
+  color: #CD454A;
+}
+.main-table table > tfoot > tr > td > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  font-size: 12px;
+  width: 100%;
+}
+.main-table table > tfoot > tr > td > div .total {
+  flex: 0;
+  display: inline-block;
+  color: #848d95;
+  white-space: nowrap;
+  text-align: left;
+  width: auto;
+}
+.main-table table > tfoot > tr > td > div .paginator {
+  flex: 1;
+  display: inline-block;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+}
+.main-table table > tfoot > tr > td > div .paginator button {
+  border: none;
+  border-radius: 2px;
+  background-size: contain;
+  background-position: center center;
+  background-color: #efefef;
+  color: #848d95;
+  height: 16px;
+  min-width: 16px;
+  width: auto;
+  white-space: nowrap;
+}
+.main-table table > tfoot > tr > td > div .paginator button:hover,
+.main-table table > tfoot > tr > td > div .paginator button.active {
+  background-color: #f8ddda;
+  color: #cd454a;
+}
+.main-table table > tfoot > tr > td > div .paginator button:not(:last-child) {
+  margin-right: 9px;
+}
+.main-table table > tfoot > tr > td > div .paginator button[name="pagefrst"] {
+  background-image: url('../assets/icons/icon_double_arrow_left.png');
+}
+.main-table table > tfoot > tr > td > div .paginator button[name="pagefrst"]:hover {
+  background-image: url('../assets/icons/icon_double_arrow_left_hover.png');
+}
+.main-table table > tfoot > tr > td > div .paginator button[name="pageprev"] {
+  background-image: url('../assets/icons/icon_arrow_left.png');
+}
+.main-table table > tfoot > tr > td > div .paginator button[name="pageprev"]:hover {
+  background-image: url('../assets/icons/icon_arrow_left_hover.png');
+}
+.main-table table > tfoot > tr > td > div .paginator button[name="pagenext"] {
+  background-image: url('../assets/icons/icon_arrow_right.png');
+}
+.main-table table > tfoot > tr > td > div .paginator button[name="pagenext"]:hover {
+  background-image: url('../assets/icons/icon_arrow_right_hover.png');
+}
+.main-table table > tfoot > tr > td > div .paginator button[name="pagelast"] {
+  background-image: url('../assets/icons/icon_double_arrow_right.png');
+}
+.main-table table > tfoot > tr > td > div .paginator button[name="pagelast"]:hover {
+  background-image: url('../assets/icons/icon_arrow_right_hover.png');
+}
+.tabletools > .filtertools {
+  float: left;
+}
+.tabletools > .searchgroup,
+.tabletools > .buttongroup {
+  float: right;
+}
+.tabletools > .buttongroup button:last-child {
+  margin-right: 0!important;
+}
+.tabletools > .searchgroup {
+  margin-right: 8px;
+}
+.tabletools > .searchgroup > input {
+  box-sizing: border-box;
+  border: 1px solid #d6d6d6 !important;
+}
+.toolsgroup {
+  /*
+    &.buttongroup{
+        button{
+            border-radius: 4px;
+            box-sizing: border-box;
+            padding: 8px 20px 8px 20px;
+            vertical-align: middle;
+            height: auto!important;
+            width: auto!important;
+
+            img{
+                height: 12px!important;
+                width: 12px!important;
+                margin-right: 10px;
+                vertical-align: middle; 
+            }
+        }
+    }
+    */
+}
+.toolsgroup > * {
+  float: left;
+}
+.toolsgroup > input[type="text"] {
+  height: 30px!important;
+  font-size: 12pt!important;
+}
+button {
+  outline: 0;
+}
+button:focus {
+  outline: 0;
+}
+button.btn {
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 8px 20px 8px 20px;
+  vertical-align: middle;
+  height: auto!important;
+  width: auto!important;
+  font-size: 12px!important;
+}
+button.btn img {
+  height: 12px!important;
+  width: 12px!important;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.searchgroup input[type="text"] {
+  padding: 2px 10px 2px 10px;
+  box-sizing: content-box;
+}
+.sidebar-01 {
+  background-image: url("../assets/icons/icon_anticounterfeit.png");
+}
+.sidebar-02 {
+  background-image: url("../assets/icons/icon_products.png");
+}
+.sidebar-02:hover,
+.sidebar-02.router-link-active {
+  background-image: url("../assets/icons/icon_products_active.png");
+}
+.sidebar-03 {
+  background-image: url("../assets/icons/icon_stores.png");
+}
+.sidebar-03:hover,
+.sidebar-03.router-link-active {
+  background-image: url("../assets/icons/icon_stores_active.png");
+}
+.sidebar-04 {
+  background-image: url("../assets/icons/icon_channels.png");
+}
+.sidebar-05 {
+  background-image: url("../assets/icons/icon_lowprice.png");
+}
+.sidebar-08 {
+  background-image: url("../assets/icons/icon_unauth.png");
+}
+.sidebar-11 {
+  background-image: url("../assets/icons/icon_settings.png");
+}
+.sidebar-11:hover,
+.sidebar-11.router-link-active {
+  background-image: url("../assets/icons/icon_settings.png");
+}
+.sidebar-12 {
+  background-image: url("../assets/icons/icon_personal.png");
+}
+.sidebar-12:hover,
+.sidebar-12.router-link-active {
+  background-image: url("../assets/icons/icon_personal.png");
+}
+.pagehead-sidebar-02 {
+  background-image: url("../assets/icons/icon_pagehead_products.png");
+}
+.pagehead-sidebar-03 {
+  background-image: url("../assets/icons/icon_pagehead_stores.png");
+}
+.pagehead-sidebar-11 {
+  background-image: url("../assets/icons/icon_pagehead_settings.png");
+}
+.pagehead-sidebar-12 {
+  background-image: url("../assets/icons/icon_pagehead_person.png");
+}
+.title-1 {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+}
+.title-2 {
+  font-size: 20px;
+  font-weight: medium;
+  line-height: 24px;
+}
+.title-3 {
+  font-size: 18px;
+  font-weight: medium;
+  line-height: 24px;
+}
+.title-4 {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 20px;
+}
+.charttitle {
+  text-align: center!important;
+}
+.chart-number {
+  text-align: center!important;
+}
+.upload-modal-icon {
+  width: 100%;
+  height: 80px;
+  background-color: white;
+  background-size: auto 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.upload-modal-icon.progress {
+  background-image: url('../assets/icons/icon_wait.png');
+}
+.upload-modal-icon.success {
+  background-image: url('../assets/icons/icon_success.png');
+}
+.upload-modal-icon.failed {
+  background-image: url('../assets/icons/icon_failure.png');
+}
+.modal-body .form-group:not(.align-left) {
+  text-align: center;
+}
+.modal-body .form-group label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333333;
+}
+.modal-body .form-group p {
+  font-size: 14px;
+  font-weight: normal;
+  color: #999999;
+}
+.modal-footer {
+  justify-content: center!important;
+}
+.modal-footer button {
+  padding-left: 19px;
+  padding-right: 19px;
+  text-align: center;
+  min-width: 104px;
+}

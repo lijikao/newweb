@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>不符合要求错误</title>
+    <desc>Created with Sketch.</desc>
+    <g id="不符合要求错误" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-10">
+            <circle id="Oval" fill="#CD454A" cx="8" cy="8" r="8"></circle>
+            <path d="M3.5,7.5 L3.5,8.5 L7.5,8.5 L7.5,12.5 L8.5,12.5 L8.5,8.5 L12.5,8.5 L12.5,7.5 L8.5,7.5 L8.5,3.5 L7.5,3.5 L7.5,7.5 L3.5,7.5 Z" id="Combined-Shape" stroke="#FFFFFF" transform="translate(8.000000, 8.000000) rotate(45.000000) translate(-8.000000, -8.000000) "></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,62 @@
+{
+    "cn": {
+        "entry": {
+            "sidebar-01": "反假冒",
+            "sidebar-02": "假货识别",
+            "sidebar-03": "售假店铺统计",
+            "sidebar-04": "渠道管理",
+            "sidebar-05": "低价监控",
+            "sidebar-06": "低价商品报告",
+            "sidebar-07": "违规店铺列表",
+            "sidebar-08": "窜货管理",
+            "sidebar-09": "商品报告",
+            "sidebar-10": "店铺列表",
+            "sidebar-11": "配置",
+            "sidebar-12": "个人中心"
+        },
+        "shared": {
+            "dateranger": {
+                "days7": "近7天",
+                "days15": "近15天",
+                "days30": "近30天",
+                "caption": "时间："
+            },
+            "common": {
+                "option_all": "全部",
+                "export": "下载数据",
+                "search": "搜索",
+                "empty": "暂无资料"
+            }
+        }
+    },
+    "en": {
+        "entry": {
+            "sidebar-01": "Anti-counterfeiting",
+            "sidebar-02": "Fake identification",
+            "sidebar-03": "Stores statistics",
+            "sidebar-04": "Channel management",
+            "sidebar-05": "Low price monitoring",
+            "sidebar-06": "Low-priced product report",
+            "sidebar-07": "Violation store report",
+            "sidebar-08": "Unauthorized sales monitoring",
+            "sidebar-09": "Unauthorized product report",
+            "sidebar-10": "Unauthorized store report",
+            "sidebar-11": "Configuration",
+            "sidebar-12": "Personal Center"
+        },
+        "shared": {
+            "dateranger": {
+                "days7": "Last 7 days",
+                "days15": "Last 15 days",
+                "days30": "Last 30 days",
+                "caption": "Time："
+            },
+            "common": {
+                "option_all": "All",
+                "export": "download",
+                "search": "search",
+                "empty": "No data"
+            }
+        }
+    }
+}
