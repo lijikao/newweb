@@ -34,15 +34,15 @@
     props: ["locale"],
     data: function() {
       return {
-          startTime:'',
-          endTime:'',
+        startTime:'',
+        endTime:'',
         isSCreen: false,
         dateStart: null,
         dateEnd: null,
         $picker: null,
         screenInputValue: "",
         screenData: [{ id: 'all', name: "ALL" ,flag:false}], // filter menu data
-        screenSLideData: [],
+        screenSLideData: ['ALL'],
         // filterTagData: [], // store all selected tag data
         isAllTag: false,
       };
@@ -111,13 +111,13 @@
         if ($(this).hasClass("active")) {
           $(this).removeClass("active");
           that.screenData[$(this).attr("data")].flag = false;
-          that.isAllTag = false;
+          // that.isAllTag = false;
           that.uncheckAllTags();
           return;
         }
         $(this).addClass("active");
         that.screenData[$(this).attr("data")].flag = true;
-        that.isAllTag = true;
+        // that.isAllTag = true;
         that.checkAllTags();
       });
       // tag select event
@@ -205,9 +205,8 @@
           if(!ele.flag && ele.name !== "ALL") {
             toggle = false;
           }
-          this.isAllTag = toggle;
         });
-        if(this.isAllTag) {
+        if(toggle) {
           this.checkTheAllTag();
         } else {
           this.uncheckTheAllTag();
@@ -219,7 +218,7 @@
         console.log(".screen-list span:gt(0)")
         console.log($(".screen-list span"))
         // reset data to avoid duplication
-        that.screenSLideData = [];
+        // that.screenSLideData = [];
         $(".screen-list span:gt(0)").each(function (index) {
           that.checkCertainTag($(this));
         });
@@ -243,16 +242,10 @@
       uncheckCertainTag: function (jqEle) {
         $(jqEle).removeClass("active");
         this.screenData[$(jqEle).attr("data")].flag = false;
-        this.screenSLideData.splice($.inArray($(jqEle).closest("li").text(),this.screenSLideData),1);
       },
       checkCertainTag: function (jqEle) {
         $(jqEle).addClass("active");
         this.screenData[$(jqEle).attr("data")].flag = true;
-        this.screenSLideData.push(
-          $(jqEle)
-            .closest("label")
-            .text()
-        );
       }, 
       saveDateRange: function(start, end) {
         let thisvue = this;
@@ -271,22 +264,33 @@
       },
       changeChecked: function() {},
       screenBtnClick: function() {
-          var str = "";
-          var brandData = "";
-          $('.screen-list .active').each(function(){
-              return str +=$(this).attr('id')+','
-          });
-          brandData = str.slice(0,str.length-1);
-          console.log('-------branddata-----')
-          console.log(brandData)
-          if(brandData.indexOf("all")>= 0){
-              window.brandData = '';
-              this.saveDateRange(this.startTime,this.endTime);
-          }else {
-              window.brandData = brandData;
-              this.saveDateRange(this.startTime,this.endTime);
-          }
-          this.isSCreen = false;
+        let that = this;
+        var str = "";
+        var brandData = "";
+        let isAll = (_.filter(that.screenData,o=>o.flag).length) == (that.screenData.length);
+        that.isAllTag = isAll;
+        
+        that.screenSLideData = _(that.screenData)
+          .filter(o => o.flag)
+          .map(o=>o.name)
+          .value();
+        
+        console.log('----new slide', that.screenSLideData)
+        // update screen slide
+        $('.screen-list .active').each(function(){
+            return str +=$(this).attr('id')+','
+        });
+        brandData = str.slice(0,str.length-1);
+        console.log('-------branddata-----')
+        console.log(brandData)
+        if(brandData.indexOf("all")>= 0){
+            window.brandData = '';
+            this.saveDateRange(this.startTime,this.endTime);
+        }else {
+            window.brandData = brandData;
+            this.saveDateRange(this.startTime,this.endTime);
+        }
+        this.isSCreen = false;
       },
       screenInputFunction: function() {
         $(".screen-list li").show();

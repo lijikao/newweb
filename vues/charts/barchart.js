@@ -156,6 +156,7 @@
                     let thisvue = this;
                     if (true !== wna.IsNullOrUndefined(thisvue.viewState.barChart)){
                         let chartopts = _makeChartOptions(thisvue.model, thisvue.viewModel, thisvue.locale);
+
                         thisvue.viewState.barChart.setOption(chartopts, true);
                     }
                 }

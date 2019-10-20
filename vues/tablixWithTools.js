@@ -6,16 +6,17 @@
                     <div class="filtertools" v-if="(true !== wna.IsNullOrEmpty(viewModel.filters))">
                         <div class="toolsgroup" v-for="f in viewModel.filters" >
                             <label>{{locale.fields[f.fieldid]}}</label>
-                            <select :name="f.fieldid" v-model="viewState.filters[f.fieldid]" v-on:change="onFilterChange($event, f.fieldid)">
-                                <option value='-------'>{{locale.common.option_all}}</option>
-                                <option v-for="o in f.options" v-if="(true !== wna.IsNullOrEmpty(o))" :value="o">{{o}}</option>
+                            <select :name="f.fieldid" 
+                                v-on:change="onFilterChange($event, f.fieldid)">
+                                <option value=''>{{locale.common.option_all}}</option>
+                                <option v-for="o in f.options" v-if="(true !== wna.IsNullOrEmpty(o))" :value="o.value">{{o.name}}</option>
                             </select>							
                         </div>
                     </div>
                     <div class="toolsgroup buttongroup">
                         <!--
                         <button type="button" v-for="b in viewModel.buttons" v-bind:value="b.id" v-on:click="onButtonClick" v-bind:class="[((true === wna.IsNullOrEmpty(b.classes)) ? '' : b.classes)]">{{locale.buttons[b.id]}}</button>
-                        //-->
+                        -->
                         <!-- removed from button declaration: v-if="(true === wna.IsNullOrUndefined(b.visibleInTabs)) || (_.includes(b.visibleInTabs, viewState.selectedTab))" //-->
                         <!-- removed from button declaration:  //-->
                         <button type="button" v-for="b in viewModel.buttons" 
@@ -27,14 +28,12 @@
                     </div>	
                     <div class="toolsgroup searchgroup" v-if="(true === wna.IsFunction(viewModel.search))">
                         <input type="text" v-model="viewState.searchNeedle" v-bind:placeholder="locale.common.search">
-                        <!--
-                        <button type="button" v-on:click="onSearch($event, viewModel.search)" class="btn-red">{{locale.common.search}}</button>
-                        //-->
+                        <button type="button" v-on:click="onSearch()" class="btn btn-red">{{locale.common.search}}</button>
                     </div>	
                 </div><!--tabletools-->
                 <div class="tablecontetnt table-responsive">
                     <vc-tablix ref="tablix" :id="'tablix_core__' + id" :model="model" :view-model="viewModel" :locale="locale" :lang="lang" 
-                        @tableviewModelChange="(query)=> $emit('tableviewModelChange',query)"></vc-tablix>
+                        @tableviewModelChange="(query,opt)=> $emit('tableviewModelChange',query,opt)"></vc-tablix>
                 </div>
             </div>
         `,
@@ -49,10 +48,6 @@
             };
         },
         watch: {
-            'viewState.searchNeedle': function(){
-                this.viewState.shouldUpdateActiveModel = true;
-                console.log('----------- searchNeedle change: ', this.viewState.searchNeedle);
-            }
         },
         computed: {
             // 原数据过滤函数
@@ -100,9 +95,12 @@
             onFilterChange: function (ev, fieldid) {
                 let thisvue = this;
                 let vwstate = thisvue.viewState;
+                let fieldValue = ev.target.value;
                 //let filtersForCurrentTab = vwstate.filters[vwstate.selectedTab];
-                vwstate.shouldUpdateActiveModel = true;
-                console.log('###-- Tablix-with-tools: filter change:', vwstate.filters[vwstate.selectedTab]);
+                this.$emit('tableviewModelChange',{
+                    // condition is for the "低风险" format： 1. number 2. "" empty 3. "中文"
+                    [this.mapFieldToRequestField(fieldid)]:Number.isNaN(Number.parseInt(fieldValue))&&fieldValue!=""?`\"${fieldValue}\"`:fieldValue
+                });
             },
             onButtonClick: function (ev, callback) {
                 //console.log('###-- Tablix-with-tools: onButtonClick: ', $(ev.target), $(ev.target).attr('data-toggle'), wna.IsNullOrEmpty($(ev.target).attr('data-toggle')));
@@ -134,6 +132,22 @@
                     filters: filters
                 });
             },
+            mapFieldToRequestField(filedName){
+                let map = {
+                    ChannelName:'channelids',
+                    level_name:'discrimnants',
+                    ConfidenceLevelBucketName:'confidence',
+                }
+                return map[filedName];
+            },
+            onSearch(){
+                let searchKey = this.viewState.searchNeedle;
+                this.$emit('tableviewModelChange',{
+                    search: searchKey,
+                },{
+                    global: true
+                })
+            }
         },
         //### Lifecycle Hooks
         beforeMount: function(){

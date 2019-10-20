@@ -1,6 +1,10 @@
 (function() {
   Vue.component("vc-tablix", {
     template: `
+          <div style="position:relative;">
+            <div class="table-loader" v-if="viewModel.tableLoading">
+              <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
             <table :id="id" class="table table-striped" v-if="true !== wna.IsNullOrEmpty(viewModel.cols)">
                 <thead>
                     <tr>
@@ -37,6 +41,7 @@
                     </tr>
                 </tfoot>
             </table>
+          </div>
         `,
     props: ["id", "model", "viewModel", "locale", "lang"],
     data: function() {
@@ -47,7 +52,7 @@
           totalPages: 0,
           needSort: false,
           sorting: []
-        }
+        },
       };
     },
     watch: {

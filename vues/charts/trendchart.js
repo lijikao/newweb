@@ -16,10 +16,13 @@
         },
         xAxis: [
             {
-                type: 'category',                     //!!! may be configured via viewModel
+                type: 'time',                     //!!! may be configured via viewModel
                 //boundaryGap: false,                   
                 axisLabel: {
                     color: 'rgba(51,51,51,.4)',
+                    formatter: function(val) {
+                        return moment(val).format("YYYY")+'\n'+moment(val).format("MM-DD")
+                    } 
                 },
                 axisTick: {
                     //show: false,
@@ -30,6 +33,11 @@
                         color: '#EAEAEA'
                     }
                 },
+                // min: function(value) {
+                //     let date = new Date(value);
+                //     date.setDate(date.getDate()-4);
+                //     return date.getMilliseconds();
+                // }
                 //data: ['京东', '考拉', '淘宝', '天猫'],       //!!! should be loaded from model
             }
         ],
@@ -42,6 +50,7 @@
                 axisTick: {
                     show: false
                 },
+                splitLine: {show:false},
                 axisLine: {
                     show: false,
                     lineStyle: {
@@ -101,20 +110,25 @@
     let _makeChartOptions = function(model, viewModel, locale){
         let legends = [];
         let series = [];
+        let xData = [];
         let opts = {};
 
         if (true !== wna.IsNullOrEmpty(model)){
+            xData = model.x;
             series = _.map(model.series, (val) => {
                 legends.push(val.name);
                 return _.merge(val, {
                     type: 'bar',
-                    barGap: '100%',
-                    barWidth: '10%',
+                    barGap: '50%',
+                    barWidth: '40%',
                 });
             });
         }
 
         opts = _.merge(opts, _echartsOptions, {
+            xAxis:[{
+                data: xData,
+            }],
             series: series,
             legend: {
                 data: legends,
@@ -123,6 +137,9 @@
                 left: 'left'
             }
         });
+
+        console.log('-------------important')
+        console.log(model)
 
         opts.xAxis[0].data = (true !== wna.IsNullOrEmpty(model)) ? model.categories : [];
         return opts;

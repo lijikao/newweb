@@ -95,16 +95,14 @@
                 viewModel: {
                     lastViewState: null,
                     tableview: {
+                        tableLoading: false,
                         rowsPerPage: 10,
                         cols: [
                             {
-                                fieldid: 'resultid'
+                                fieldid: 'ShopName'
                             },
                             {
                                 fieldid: 'ChannelName'
-                            },
-                            {
-                                fieldid: 'ShopName'
                             },
                             {
                                 fieldid: 'FakeProductNum'
@@ -179,41 +177,120 @@
            
         },
         methods: {
-            tableviewModelChange: function (query, isDefault) {
+            tableviewModelChange: function (query, opt) {
                 /*
-                    query: {
-                    keyToChange: value
-                    ... repeat 
-                    }
+                 query: {
+                   keyToChange: value
+                   ... repeat 
+                 }
                 */
                 // add user key 
+                
                 let that = this;
+                let globalQuery = {}; // used as global activated
+                let emptyQuery= {
+                    key: "discrimination_report_paging",
+                    start_date: "",
+                    end_date: "",
+                    industry: "",
+                    category: "",
+                    brand: "",
+                    series: "",
+                    model: "",
+                    search: "",
+                    userid: "",
+                    page: 0,
+                    record_per_page: "10",
+                    rp_status: "0",
+                    channelids: "",
+                    discrimnants: "",
+                    confidence: "",
+                }
+        
+                this.activeTableLoader();
                 this.tableviewQuery.userid =  localStorage.getItem("UserId") && JSON.parse(localStorage.getItem("UserId")).val;
                 this.tableviewQuery.start_date = this.viewState.start_date?this.viewState.start_date:"2019-10-05 00:00:00";
                 this.tableviewQuery.end_date = this.viewState.end_date?this.viewState.end_date:"2019-10-10 00:00:00";
                 this.tableviewQuery.brand = window.brandData||"";
-                query && Object.keys(query).forEach((key)=>{
+                
+                if (opt&&opt.global) {
+                  // temp global intervention for search or other query
+                  globalQuery = {
+                    ... emptyQuery,
+                    start_date: this.tableviewQuery.start_date,
+                    end_date: this.tableviewQuery.end_date,
+                    brand: this.tableviewQuery.brand,
+                    userid: this.tableviewQuery.userid,
+                    ...query,
+                    
+                  };
+                }else{
+                  // temp global intervention for search or other query
+                  if(opt&&opt.clearing=="deep"){
+        
+                  }else if(opt&&opt.clearing=="keepTab"){
+        
+                  }
+                  query && Object.keys(query).forEach((key)=>{
                     this.tableviewQuery[key] = query[key];
-                });
+                  });
+                }
                 let url = `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/abnormal_shop_report`;
                 $.ajax({
-                    url:  url,
-                    type: "GET",
-                    data: this.tableviewQuery,
-                    headers: {'Authorization': 'Bearer '+JSON.parse(localStorage.getItem("token")).val+''},
-                    changeOrigin: true,
-                    crossDomain: true,
-                    success: function(rex) {
-                        let data = rex.results[1];
-                        that.tableviewModel.info = {
-                            page: parseInt(rex.query.page),
-                            countNum: _.head(rex.results[0]).Total,
-                        };
-                        that.tableviewModel.data = data;
-                    },
-                    error: function(response) {
-
-                    }
+                  url:  url,
+                  type: "GET",
+                  data: opt&&opt.global? globalQuery : this.tableviewQuery,
+                  headers: {'Authorization': 'Bearer '+JSON.parse(localStorage.getItem("token")).val+''},
+                  changeOrigin: true,
+                  crossDomain: true,
+                  success: function(rex) {
+                    let data = rex.results[1];
+                    that.tableviewModel.info = {
+                      page: parseInt(rex.query.page),
+                      countNum: rex.results[0][0].Total,
+                    };
+                    that.tableviewModel.data = data;
+                    that.shutTableLoader();
+                  },
+                  error: function(response) {
+                    alert("表格数据加载失败");
+                  }
+                });
+            },
+            // loader for table 
+            activeTableLoader: function() {
+                this.viewModel.tableview.tableLoading = true;
+            },
+            shutTableLoader: function() {
+                this.viewModel.tableview.tableLoading = false;
+            },
+            requestTabAndDropdownData() {
+                let that = this;
+                let url = `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/abnormal_shop_report`;
+                $.ajax({
+                  url:  url,
+                  type: "GET",
+                  data: {
+                    key: "discrimination_report_filter",
+                    start_date: that.viewState.start_date,
+                    end_date: that.viewState.end_date,
+                    brandids: window.brandData||"",
+                  },
+                  headers: {'Authorization': 'Bearer '+JSON.parse(localStorage.getItem("token")).val+''},
+                  changeOrigin: true,
+                  crossDomain: true,
+                  success: function(rex) {
+                    //chanel
+                    that.viewModel.tableview.filters[0].options = rex.results[0].map(function(val) {
+                      return {
+                        name: val.ChannelName,
+                        value: val.ChannelId,
+                      }
+                    });
+                  },
+                  error: function(response) {
+                    alert("表格筛选加载失败");                    
+                  }
                 });
             },
             requestDashboardData:function(query) {
@@ -252,7 +329,7 @@
                         console.log(rex)
                     },
                     error: function(response) {
-        
+                        alert("DASHBOARD 数据加载失败");     
                     }
                 });
             },
@@ -411,6 +488,7 @@
                 thisvue.viewState.end_date = (true !== wna.IsNullOrEmpty(end)) ? end.format('YYYY-MM-DD 23:59:59') : '';
                 console.log('------- onDateRangeChange >', thisvue.path, ev.detail);
                 // thisvue.$emit('request-data', thisvue.path, start, end, {keys: ['channel', 'series', 'model']}, thisvue.onRequestReturned, thisvue);
+                thisvue.requestTabAndDropdownData();
                 thisvue.requestDashboardData({});
                 thisvue.tableviewModelChange()
             },

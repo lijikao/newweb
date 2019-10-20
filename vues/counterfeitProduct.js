@@ -181,7 +181,7 @@
           start_date: "",
           end_date: "",
           industry: "1",
-          category: "1",
+          category: "",
           brand: "",
           series: "",
           model: "",
@@ -197,7 +197,7 @@
         viewState: {
           start_date: null,
           end_date: null,
-          dataState: null //null, loading, ready, error
+          dataState: null, //null, loading, ready, error
         },
         viewModel: {
           //lastViewState: null,
@@ -205,19 +205,19 @@
             //selectable: true, //single select
             rowsPerPage: 10,
             multiselect: true,
+            tableLoading: false,
             primaryKey: "ResultId",
             tabs: [
               {
                 id: "tab_all",
-                filter: null /*function(dataset){
-                                    //console.log('------ > tab_all activated', dataset);
-                                    return dataset;
-                                },*/,
+                filter: { RightsProtectionStatus: 0 },                
+                sum: 0,
                 default: true
               },
               {
                 id: "tab_pending",
-                filter: { RightsProtectionStatus: 1 }
+                filter: { RightsProtectionStatus: 1 },
+                sum: 0,
                 /*
                                 filter: function(dataset){
                                     //console.log('------ > tab_pending activated', dataset);
@@ -227,7 +227,8 @@
               },
               {
                 id: "tab_waiting",
-                filter: { RightsProtectionStatus: 2 }
+                filter: { RightsProtectionStatus: 2 },
+                sum: 0,
                 /*
                                 filter: function(dataset){
                                     //console.log('------ > tab_waiting activated', dataset);
@@ -237,7 +238,8 @@
               },
               {
                 id: "tab_progress",
-                filter: { RightsProtectionStatus: 5 }
+                filter: { RightsProtectionStatus: 5 },
+                sum: 0,
                 /*
                                 filter: function(dataset){
                                     //console.log('------ > tab_progress activated', dataset);
@@ -247,7 +249,8 @@
               },
               {
                 id: "tab_success",
-                filter: { RightsProtectionStatus: 4 }
+                filter: { RightsProtectionStatus: 4 },
+                sum: 0,
                 /*
                                 filter: function(dataset){
                                     //console.log('------ > tab_success activated', dataset);
@@ -257,7 +260,8 @@
               },
               {
                 id: "tab_failed",
-                filter: { RightsProtectionStatus: 3 }
+                filter: { RightsProtectionStatus: 3 },
+                sum: 0,
                 /*
                                 filter: function(dataset){
                                     //console.log('------ > tab_failed activated', dataset);
@@ -561,7 +565,8 @@
             ]
           }
         },
-        isDisabled: false
+        isDisabled: false,
+        channelIdAndNameMap: {},
       };
     },
     mounted() {
@@ -592,27 +597,71 @@
     computed: {},
     methods: {
       // tableview model change event 
-      tableviewModelChange: function (query, isDefault) {
+      tableviewModelChange: function (query, opt) {
         /*
          query: {
            keyToChange: value
            ... repeat 
          }
         */
-       // add user key 
+        // add user key 
+        
         let that = this;
+        let globalQuery = {}; // used as global activated
+        let emptyQuery= {
+          key: "discrimination_report_paging",
+          start_date: "",
+          end_date: "",
+          industry: "",
+          category: "",
+          brand: "",
+          series: "",
+          model: "",
+          search: "",
+          userid: "",
+          page: 0,
+          record_per_page: "10",
+          rp_status: "",
+          channelids: "",
+          discrimnants: "",
+          confidence: "",
+        }
+
+        // active loader
+        this.activeTableLoader();
+        
         this.tableviewQuery.userid =  localStorage.getItem("UserId") && JSON.parse(localStorage.getItem("UserId")).val;
         this.tableviewQuery.start_date = this.viewState.start_date?this.viewState.start_date:"2019-10-05 00:00:00";
         this.tableviewQuery.end_date = this.viewState.end_date?this.viewState.end_date:"2019-10-10 00:00:00";
         this.tableviewQuery.brand = window.brandData||"";
-        query && Object.keys(query).forEach((key)=>{
-          this.tableviewQuery[key] = query[key];
-        });
+        
+        if (opt&&opt.global) {
+          // temp global intervention for search or other query
+          globalQuery = {
+            ... emptyQuery,
+            start_date: this.tableviewQuery.start_date,
+            end_date: this.tableviewQuery.end_date,
+            brand: this.tableviewQuery.brand,
+            userid: this.tableviewQuery.userid,
+            ...query,
+            
+          };
+        }else{
+          // temp global intervention for search or other query
+          // if(opt&&opt.clearing=="deep"){
+
+          // }else if(opt&&opt.clearing=="keepTab"){
+
+          // }
+          query && Object.keys(query).forEach((key)=>{
+            this.tableviewQuery[key] = query[key];
+          });
+        };
         let url = `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/commodity_test_report`;
         $.ajax({
           url:  url,
           type: "GET",
-          data: this.tableviewQuery,
+          data: opt&&opt.global? globalQuery : this.tableviewQuery,
           headers: {'Authorization': 'Bearer '+JSON.parse(localStorage.getItem("token")).val+''},
           changeOrigin: true,
           crossDomain: true,
@@ -623,6 +672,71 @@
               countNum: rex.results[0][0].CountNum,
             };
             that.tableviewModel.data = data;
+            that.shutTableLoader();
+          },
+          error: function(response) {
+
+          }
+        });
+      },
+      // loader for table 
+      activeTableLoader: function() {
+        this.viewModel.tableview.tableLoading = true;
+      },
+      shutTableLoader: function() {
+        this.viewModel.tableview.tableLoading = false;
+      },
+      // request new tab and control data list
+      requestTabAndDropdownData() {
+        let that = this;
+        let url = `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/commodity_test_report`;
+        $.ajax({
+          url:  url,
+          type: "GET",
+          data: {
+            key: "discrimination_report_filter",
+            start_date: that.viewState.start_date,
+            end_date: that.viewState.end_date,
+            brandids: window.brandData||"",
+            rp_status: ""
+          },
+          headers: {'Authorization': 'Bearer '+JSON.parse(localStorage.getItem("token")).val+''},
+          changeOrigin: true,
+          crossDomain: true,
+          success: function(rex) {
+            rex.results[0].forEach(function(val) {
+              let correspondingTab = _.find(that.viewModel.tableview.tabs, function(o) {
+                  return o.filter.RightsProtectionStatus === val.RightsProtectionStatus;
+                }
+              );
+              correspondingTab.sum = val['count(0)'];
+            })
+            //chanel
+            that.viewModel.tableview.filters[0].options = rex.results[1].map(function(val) {
+              // cache the channel name to use later in the graph
+              that.channelIdAndNameMap[val.ChannelId] = val.ChannelName;
+              console.log("-----channel",that.channelIdAndNameMap)
+              return {
+                name: val.ChannelName,
+                value: val.ChannelId,
+              };
+            });
+            //results
+            that.viewModel.tableview.filters[1].options = rex.results[2].map(function(val) {
+              return {
+                name: val.DiscriminantResult,
+                value: val.DiscriminantResult,
+              }
+            });
+            //confidence
+            that.viewModel.tableview.filters[2].options = rex.results[3].map(function(val) {
+              return {
+                name: val.ConfidenceLevelBucketName,
+                value: val.ConfidenceLevelBucketName,
+              }
+            });
+            console.log('------new tab data-------')
+            console.log(rex.results)
           },
           error: function(response) {
 
@@ -865,22 +979,20 @@
           dates: [],
           fakeVal: [],
         };
-        let organizedData = metaData.reduce((acc,val) => {
-          acc.dates.push(val.FakeProductValueTradeData);
-          acc.fakeVal.push(val.FakeProductValueTradeValue);
-          return acc;
-        },organizedDataTemplate)
+        let organizedData = [];
+        metaData.forEach((val) => {
+          organizedData.push([moment(val.FakeProductValueTradeData).toDate(),val.FakeProductValueTradeValue]);
+        },[])
+        
         this.dashboardModel.trendChart = {
-          x:organizedData.dates,
           series: [
             {
               color: "rgb(244,115,115)",
-              name: "假",
-              data: organizedData.fakeVal,
+              name: this.locale.valuesMapping.DiscriminantResult[0],
+              data: organizedData,
             }
           ],
         }
-
       },
       buildPieChartModel: function() {
         let thisvue = this;
@@ -1044,17 +1156,21 @@
         })
         //  2) Construct the bar-chart model
         let barChart1Model = {
-          categories: series.channels,
+          categories: series.channels.map(val => {
+            console.log("----series",val)
+            console.log("----series",this.channelIdAndNameMap[val])
+            return this.channelIdAndNameMap[val]
+          }),
           series: [
             {
-              name: "真",
+              name: this.locale.valuesMapping.DiscriminantResult[1],
               data: series.realCounts,
               itemStyle: {
                 color: "#7290F2"
               }
             },
             {
-              name: "假",
+              name: this.locale.valuesMapping.DiscriminantResult[0],
               data: series.fakeCounts,
               itemStyle: {
                 color: "#F47373"
@@ -1112,6 +1228,7 @@
         thisvue.viewState.start_date = (true !== wna.IsNullOrEmpty(start)) ? start.format('YYYY-MM-DD 00:00:00') : '';
         thisvue.viewState.end_date = (true !== wna.IsNullOrEmpty(end)) ? end.format('YYYY-MM-DD 23:59:59') : '';
         console.log("------- onDateRangeChange >", thisvue.path, ev.detail);
+        thisvue.requestTabAndDropdownData();
         thisvue.requestDashboardData({});
         thisvue.tableviewModelChange()
       },

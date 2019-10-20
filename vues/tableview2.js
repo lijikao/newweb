@@ -10,9 +10,9 @@
                 <div class="tabswrap" v-if="(true !== wna.IsNullOrEmpty(viewModel.tabs)) && (true !== wna.IsNullOrEmpty(locale)) && (true !== wna.IsNullOrEmpty(locale.tabs))">
                     <ul>
                         <li v-for="(t, i) in viewModel.tabs" v-bind:class="[ (t.id === viewState.selectedTab) ? 'activetab' : '' ]" v-bind:name="t.id">
-                            <button type="button" v-bind:value="t.id" v-on:click="onSelectTab(t.filter)">
+                            <button type="button" v-bind:value="t.id" v-on:click="onSelectTab(t.filter,t.id)">
                                 <span>{{ locale.tabs[t.id] }}</span>
-                                <span class="tabsnum">{{ 1}}</span>
+                                <span class="tabsnum">{{t.sum}}</span>
                             </button>
                         </li>
                     </ul>
@@ -22,7 +22,7 @@
                     :model="model" :view-model="viewModel" 
                     :locale="locale" 
                     v-on:tools-button-clicked.native="onTablixToolsButtonClicked"
-                    @tableviewModelChange="(query)=>$emit('tableviewModelChange',query)"></vc-tablix-with-tools>
+                    @tableviewModelChange="(query,opt)=>$emit('tableviewModelChange',query,opt)"></vc-tablix-with-tools>
             </div>
         `,
         props: ['id', 'model', 'viewModel', 'locale', 'lang'],
@@ -74,7 +74,8 @@
         },
         //### Methods
         methods: {
-            onSelectTab: function(filter){
+            onSelectTab: function(filter,tabid){
+                this.viewState.selectedTab = tabid;
                 this.$emit('tableviewModelChange', {
                     rp_status: filter? filter.RightsProtectionStatus: 0,
                     page: 1,
@@ -84,7 +85,7 @@
                 let thisvue = this;
                 let vwstate = thisvue.viewState;
                 let tabid = vwstate.selectedTab;
-
+                // debugger;
                 ev.stopPropagation();
                 //console.log('-------- tableview2 - onTablixToolsButtonClicked: ', tabid, ev.detail);
                 $(thisvue.$el).fire('tools-button-clicked', _.extend({}, ev.detail, { tabid: tabid }));

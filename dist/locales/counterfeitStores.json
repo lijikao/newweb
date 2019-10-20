@@ -40,12 +40,12 @@
         "total_tail": "records",
         "fields": {
           "resultid": "No.",
-          "channel": "channel",
+          "ChannelName": "channel",
           "series": "series",
           "model": "model",
           "ShopName": "store name",
-          "fake_products_count": "Number of fakes",
-          "fake_links_count": "Number of fake URLs",
+          "FakeProductNum": "Number of fakes",
+          "RightProctedLinkNum": "Number of fake URLs",
           "succeeded_links": "URLs take-down",
           "RightsProtectionStartTime": "Time of complain"
         },
