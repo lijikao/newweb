@@ -160,10 +160,10 @@
         brandData = str.slice(0,str.length-1);
         if(brandData.indexOf("all")==0){
             window.brandData = '';
-            that.saveDateRange(that.startTime,that.endTime);
+            that.saveDateRange(window.startTimes,window.endTimes);
           }else {
               window.brandData = brandData;
-              that.saveDateRange(that.startTime,that.endTime);
+              that.saveDateRange(window.startTimes,window.endTimes);
         }
       });
       var that =this;
@@ -285,10 +285,10 @@
         console.log(brandData)
         if(brandData.indexOf("all")>= 0){
             window.brandData = '';
-            this.saveDateRange(this.startTime,this.endTime);
+            this.saveDateRange(window.startTimes,window.endTimes);
         }else {
             window.brandData = brandData;
-            this.saveDateRange(this.startTime,this.endTime);
+            this.saveDateRange(window.startTimes,window.endTimes);
         }
         this.isSCreen = false;
       },

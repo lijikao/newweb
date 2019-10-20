@@ -30,7 +30,6 @@
 
                 thisrange.start = moment(ev.detail.start).format('DD/MM/YYYY');
                 thisrange.end = moment(ev.detail.end).format('DD/MM/YYYY');
-
                 $(thisvue.$el).fire('daterange-change', ev.detail);
                 //console.log('------- onDateRangeChange ', ev.detail);
             }
