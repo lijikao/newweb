@@ -17,7 +17,7 @@
         xAxis: [
             {
                 type: 'time',                     //!!! may be configured via viewModel
-                //boundaryGap: false,                   
+                boundaryGap: false,                   
                 axisLabel: {
                     color: 'rgba(51,51,51,.4)',
                     formatter: function(val) {
@@ -25,10 +25,11 @@
                     } 
                 },
                 axisTick: {
-                    //show: false,
+                    show: false,
                     alignWithLabel: true
                 },
                 axisLine: {
+                    show: false,
                     lineStyle: {
                         color: '#EAEAEA'
                     }
@@ -48,11 +49,11 @@
                     color: 'rgba(51,51,51,.4)',
                 },
                 axisTick: {
-                    show: false
+                    show: true
                 },
-                splitLine: {show:false},
+                splitLine: {show:true},
                 axisLine: {
-                    show: false,
+                    show: true,
                     lineStyle: {
                         color: '#EAEAEA',
                     }

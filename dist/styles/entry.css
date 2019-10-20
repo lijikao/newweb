@@ -978,17 +978,21 @@ button.signupbtn{
   background: #7290f2;
   border-radius: 4px;
 }
-#received-success .modal-content {
+#received-success .modal-content,
+#complaints-success .modal-content {
   text-align: center;
   padding: 30px 30px;
 }
-#received-success .modal-content .modal-body {
+#received-success .modal-content .modal-body,
+#complaints-success .modal-content .modal-body {
   padding: 0;
 }
-#received-success .modal-content .modal-footer {
+#received-success .modal-content .modal-footer,
+#complaints-success .modal-content .modal-footer {
   padding: 0;
 }
-#received-success .modal-success-icon {
+#received-success .modal-success-icon,
+#complaints-success .modal-success-icon {
   width: 80px;
   height: 80px;
   display: inline-block;
@@ -996,7 +1000,8 @@ button.signupbtn{
   background-size: cover;
   margin-bottom: 23px;
 }
-#received-success h3 {
+#received-success h3,
+#complaints-success h3 {
   font-size: 18px;
   color: #333333;
   letter-spacing: 0;
@@ -1005,7 +1010,8 @@ button.signupbtn{
   margin-bottom: 10px;
   padding: 0 50px;
 }
-#received-success p {
+#received-success p,
+#complaints-success p {
   font-size: 14px;
   color: #999999;
   letter-spacing: 0;
@@ -1013,7 +1019,8 @@ button.signupbtn{
   line-height: 20px;
   margin-bottom: 30px;
 }
-#received-success .btn {
+#received-success .btn,
+#complaints-success .btn {
   background: #7290f2;
   border-radius: 4px;
 }

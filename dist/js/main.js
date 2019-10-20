@@ -17,7 +17,7 @@
         xAxis: [
             {
                 type: 'time',                     //!!! may be configured via viewModel
-                //boundaryGap: false,                   
+                boundaryGap: false,                   
                 axisLabel: {
                     color: 'rgba(51,51,51,.4)',
                     formatter: function(val) {
@@ -25,10 +25,11 @@
                     } 
                 },
                 axisTick: {
-                    //show: false,
+                    show: false,
                     alignWithLabel: true
                 },
                 axisLine: {
+                    show: false,
                     lineStyle: {
                         color: '#EAEAEA'
                     }
@@ -48,11 +49,11 @@
                     color: 'rgba(51,51,51,.4)',
                 },
                 axisTick: {
-                    show: false
+                    show: true
                 },
-                splitLine: {show:false},
+                splitLine: {show:true},
                 axisLine: {
-                    show: false,
+                    show: true,
                     lineStyle: {
                         color: '#EAEAEA',
                     }
@@ -1391,10 +1392,10 @@ var Helpers = (function (){
         brandData = str.slice(0,str.length-1);
         if(brandData.indexOf("all")==0){
             window.brandData = '';
-            that.saveDateRange(that.startTime,that.endTime);
+            that.saveDateRange(window.startTimes,window.endTimes);
           }else {
               window.brandData = brandData;
-              that.saveDateRange(that.startTime,that.endTime);
+              that.saveDateRange(window.startTimes,window.endTimes);
         }
       });
       var that =this;
@@ -1516,10 +1517,10 @@ var Helpers = (function (){
         console.log(brandData)
         if(brandData.indexOf("all")>= 0){
             window.brandData = '';
-            this.saveDateRange(this.startTime,this.endTime);
+            this.saveDateRange(window.startTimes,window.endTimes);
         }else {
             window.brandData = brandData;
-            this.saveDateRange(this.startTime,this.endTime);
+            this.saveDateRange(window.startTimes,window.endTimes);
         }
         this.isSCreen = false;
       },
@@ -1578,7 +1579,6 @@ var Helpers = (function (){
 
                 thisrange.start = moment(ev.detail.start).format('DD/MM/YYYY');
                 thisrange.end = moment(ev.detail.end).format('DD/MM/YYYY');
-
                 $(thisvue.$el).fire('daterange-change', ev.detail);
                 //console.log('------- onDateRangeChange ', ev.detail);
             }
@@ -2196,6 +2196,20 @@ var Helpers = (function (){
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade" id="complaints-success" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <span class="modal-success-icon"></span>
+                                    <h3>Successfully !</h3>
+                                    <p>We have received your feedback and suggestions successfully. You have received a quota for this feedback.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" @click="$('#complaints-success').modal('hide');">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal fade" id="received-success" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
                           <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
@@ -2690,6 +2704,7 @@ var Helpers = (function (){
       $("#complaints-normal-quota").appendTo("body");
       $("#complaints-no-authority").appendTo("body");
       $("#received-success").appendTo("body");
+      $("#complaints-success").appendTo("body");
       $("#feedback").appendTo("body");
       //获取反馈用户信息options
       var that = this;
@@ -3438,15 +3453,7 @@ var Helpers = (function (){
             $("#feedback").modal('hide');
             $("#received-success").modal();
             //重新调取接口数据
-            that.$emit(
-              "request-data",
-              that.path,
-              window.startTimes,
-              window.endTimes,
-              { keys: ["industry", "category", "brand", "model", "series", "search"] },
-              that.onRequestReturned,
-              that
-            );
+            that.tableviewModelChange({});
           },
           error: function(response) {}
         });
@@ -3457,6 +3464,7 @@ var Helpers = (function (){
           UserId: JSON.parse(localStorage.getItem("UserId"))&&JSON.parse(localStorage.getItem("UserId")).val,
           ResultId: selectionData.join(",")
         };
+        var that = this;
         let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/update/report/commodity_test_report?key=submit_rights_status`;
         $.ajax({
           url: reportUrl,
@@ -3471,6 +3479,9 @@ var Helpers = (function (){
           data: JSON.stringify(submitFeedbackData),
           success: function(rex) {
             $("#complaints-normal-quota").modal("hide");
+            $("#complaints-success").modal();
+             //重新调取接口数据
+             that.tableviewModelChange({});
           },
           error: function(response) {
             $("#complaints-insufficient-quota").modal();
