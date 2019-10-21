@@ -278,6 +278,7 @@
                   "userPassword",
                   that.Verification.inputPassword.value
                 );
+              }
                 that.setLocalStorage(
                   "policy",
                   data.policy
@@ -294,7 +295,10 @@
                   "username",
                   data.Username
                 );
-              }
+                that.setLocalStorage(
+                "balance",
+                data.balance
+              );
               that.setLocalStorage("token", data.token);
               that.setLocalStorage("UserId", data.user.UserId);
               that.$router.push({ path: "/CounterfeitProduct" });

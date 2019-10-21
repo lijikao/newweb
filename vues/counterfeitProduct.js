@@ -46,7 +46,7 @@
                                     <p>If you want to get more complaints, you can get more complaints through data feedback</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" @click="">OK</button>
+                                    <button type="button" class="btn btn-primary" @click="$('#complaints-insufficient-quota').modal('hide')">OK</button>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                                 <div class="modal-body">
                                     <span class="modal-success-icon"></span>
                                     <h3>Do you confirm the complaint?</h3>
-                                    <p>You have not selected the feedback data, please check the data</p>
+                                    <p>You have {{balance}} </p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" @click="normalQuota">OK</button>
@@ -166,6 +166,7 @@
         feedbackOptions: [
           
         ],
+        balance:0,
         model: {
           results: [],
           channel: [],
@@ -473,9 +474,19 @@
                   if (true === wna.IsNullOrEmpty(selection)) {
                     return;
                   }
+                   //鉴权
+                  if(JSON.parse(localStorage.getItem("balance")).val>0){
+                    this.balance = JSON.parse(localStorage.getItem("balance")).val;
+                    $("#complaints-normal-quota").modal();
+                  }else if(JSON.parse(localStorage.getItem("balance")).val==0){
+                    $("#complaints-insufficient-quota").modal();
+                    return;
+                  }else {
+                    $("#complaints-insufficient-quota").modal();
+                    return;
+                  }
                   var selectionData = selection;
                   window.selectionData = selectionData;
-                  $("#complaints-normal-quota").modal();
                   let thisvue = this;
                   let vwstate = thisvue.viewState;
                   console.log("------ > button(launch): clicked!", selection);
@@ -1344,6 +1355,7 @@
         });
       },
       normalQuota: function() {
+        $("#complaints-normal-quota").modal('hide');
         //用户发起投诉
         var submitFeedbackData = {
           UserId: JSON.parse(localStorage.getItem("UserId"))&&JSON.parse(localStorage.getItem("UserId")).val,
@@ -1363,13 +1375,12 @@
           },
           data: JSON.stringify(submitFeedbackData),
           success: function(rex) {
-            $("#complaints-normal-quota").modal("hide");
-            $("#complaints-success").modal();
+            $('#complaints-success').modal();
              //重新调取接口数据
              that.tableviewModelChange({});
           },
           error: function(response) {
-            $("#complaints-insufficient-quota").modal();
+           
           }
         });
       },
