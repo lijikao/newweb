@@ -29,7 +29,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <vc-trend-chart :model="dashboardModel.trendChart" :view-model="viewModel.trendChart" :locale="localeForSubview('trendchart')" class="chartcol8 echat-230"></vc-trend-chart>
+                                <vc-trend-chart ref= "trendChart"  :model="dashboardModel.trendChart" :view-model="viewModel.trendChart" :locale="localeForSubview('trendchart')" class="chartcol8 echat-230"></vc-trend-chart>
                             </div>
                             <div class="chartrow">
                                 <vc-pie-chart :model="dashboardModel.pieChart" :locale="localeForSubview('piechart')" class="chartcol4 echat-v6"></vc-pie-chart>
@@ -220,7 +220,7 @@
             //selectable: true, //single select
             rowsPerPage: 10,
             multiselect: true,
-            tableLoading: false,
+            tableLoading: true,
             primaryKey: "ResultId",
             tabs: [
               {
@@ -345,8 +345,8 @@
                 transform: Helpers.toDateTimeString
               },
               {
-                fieldid: "statusText", //'RightsProtectionStatus',
-                visibleInTabs: ["tab_all"],
+                fieldid: "RightsProtectionStatus", //'',
+                visibleInTabs: ["tab_all","tab_pending"],
                 transform: function(value, entry) {
                   if (
                     true === wna.IsNullOrEmpty(entry) ||
@@ -375,11 +375,12 @@
                       styleclass = "";
                       break;
                   }
+                  // debugger;
                   return (
                     '<div class="status ' +
                     styleclass +
                     '"><span>' +
-                    value +
+                    entry.RightsProtectionStatusContent +
                     "</span></div>"
                   );
                 }
@@ -593,6 +594,16 @@
         isDisabled: false,
         channelIdAndNameMap: {},
       };
+    },
+    watch: {
+      locale: {
+        deep: true,
+        handler: function(val) {
+          this.dashboardModel.trendChart.series[0].name = this.locale.valuesMapping.DiscriminantResult[0]
+          this.dashboardModel.barChart1.series[0].name = this.locale.valuesMapping.DiscriminantResult[1];
+          this.dashboardModel.barChart1.series[1].name = this.locale.valuesMapping.DiscriminantResult[0];
+        }
+      },
     },
     mounted() {
       
@@ -1014,6 +1025,7 @@
           series: [
             {
               color: "rgb(244,115,115)",
+              // localeForSubview
               name: this.locale.valuesMapping.DiscriminantResult[0],
               data: organizedData,
             }
@@ -1251,8 +1263,11 @@
         let hasData = true !== wna.IsNullOrEmpty(ev.detail);
         let start = true === hasData ? ev.detail.start : null;
         let end = true === hasData && null !== start ? ev.detail.end : null;
-        thisvue.viewState.start_date = (true !== wna.IsNullOrEmpty(start)) ? start.format('YYYY-MM-DD 00:00:00') : '';
-        thisvue.viewState.end_date = (true !== wna.IsNullOrEmpty(end)) ? end.format('YYYY-MM-DD 23:59:59') : '';
+        if(start && end ) {
+          thisvue.viewState.start_date =start.format('YYYY-MM-DD 00:00:00');
+          thisvue.viewState.end_date =end.format('YYYY-MM-DD 23:59:59');
+        }
+        
         console.log("------- onDateRangeChange >", thisvue.path, ev.detail);
         thisvue.requestTabAndDropdownData();
         thisvue.requestDashboardData({});

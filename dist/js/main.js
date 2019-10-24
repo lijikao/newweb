@@ -17,11 +17,13 @@
         xAxis: [
             {
                 type: 'time',                     //!!! may be configured via viewModel
-                boundaryGap: false,                   
+                boundaryGap: [0.1,0.1],  
+                minInterval: 3600 * 24 * 1000 ,                
                 axisLabel: {
                     color: 'rgba(51,51,51,.4)',
-                    formatter: function(val) {
-                        return moment(val).format("YYYY")+'\n'+moment(val).format("MM-DD")
+                    formatter: function(val,idx) {
+                        // if(idx===0) return '';
+                        return moment(val).format("YYYY")+'\n'+moment(val).format("MM-DD");
                     } 
                 },
                 axisTick: {
@@ -34,11 +36,13 @@
                         color: '#EAEAEA'
                     }
                 },
-                // min: function(value) {
-                //     let date = new Date(value);
-                //     date.setDate(date.getDate()-4);
-                //     return date.getMilliseconds();
-                // }
+                splitLine: {show:false},
+                min: function(value) {
+                    return value.min - (3600 * 24 * 1000);
+                },
+                max: function(value) {
+                    return value.max + (3600 * 24 * 1000);
+                }
                 //data: ['京东', '考拉', '淘宝', '天猫'],       //!!! should be loaded from model
             }
         ],
@@ -125,11 +129,7 @@
                 });
             });
         }
-
         opts = _.merge(opts, _echartsOptions, {
-            xAxis:[{
-                data: xData,
-            }],
             series: series,
             legend: {
                 data: legends,
@@ -232,7 +232,9 @@
         },
         beforeMount: function(){
             
-        }
+        },
+        updated: function(){
+        },
 
     });
 })();
@@ -1125,7 +1127,7 @@ var Helpers = (function (){
         data: function(){
             return {
                 viewState: {
-                    selectedTab: null,
+                    selectedTab: "tab_all",
                     model4Tab: {}
                 }
             };
@@ -1517,10 +1519,10 @@ var Helpers = (function (){
         console.log(brandData)
         if(brandData.indexOf("all")>= 0){
             window.brandData = '';
-            this.saveDateRange(window.startTimes,window.endTimes);
+            this.saveDateRange();
         }else {
             window.brandData = brandData;
-            this.saveDateRange(window.startTimes,window.endTimes);
+            this.saveDateRange();
         }
         this.isSCreen = false;
       },
@@ -1762,6 +1764,8 @@ var Helpers = (function (){
         },
         computed: {
            
+        },
+        watch: {
         },
         methods: {
             tableviewModelChange: function (query, opt) {
@@ -2071,8 +2075,10 @@ var Helpers = (function (){
                 let hasData = (true !== wna.IsNullOrEmpty(ev.detail));
                 let start = (true === hasData) ? ev.detail.start : null;
                 let end = (true === hasData) && (null !== start) ? ev.detail.end : null;
-                thisvue.viewState.start_date = (true !== wna.IsNullOrEmpty(start)) ? start.format('YYYY-MM-DD 00:00:00') : '';
-                thisvue.viewState.end_date = (true !== wna.IsNullOrEmpty(end)) ? end.format('YYYY-MM-DD 23:59:59') : '';
+                if(start && end ) {
+                    thisvue.viewState.start_date =start.format('YYYY-MM-DD 00:00:00');
+                    thisvue.viewState.end_date =end.format('YYYY-MM-DD 23:59:59');
+                  }
                 console.log('------- onDateRangeChange >', thisvue.path, ev.detail);
                 // thisvue.$emit('request-data', thisvue.path, start, end, {keys: ['channel', 'series', 'model']}, thisvue.onRequestReturned, thisvue);
                 thisvue.requestTabAndDropdownData();
@@ -2144,7 +2150,7 @@ var Helpers = (function (){
                                         </div>
                                     </div>
                                 </div>
-                                <vc-trend-chart :model="dashboardModel.trendChart" :view-model="viewModel.trendChart" :locale="localeForSubview('trendchart')" class="chartcol8 echat-230"></vc-trend-chart>
+                                <vc-trend-chart ref= "trendChart"  :model="dashboardModel.trendChart" :view-model="viewModel.trendChart" :locale="localeForSubview('trendchart')" class="chartcol8 echat-230"></vc-trend-chart>
                             </div>
                             <div class="chartrow">
                                 <vc-pie-chart :model="dashboardModel.pieChart" :locale="localeForSubview('piechart')" class="chartcol4 echat-v6"></vc-pie-chart>
@@ -2335,7 +2341,7 @@ var Helpers = (function (){
             //selectable: true, //single select
             rowsPerPage: 10,
             multiselect: true,
-            tableLoading: false,
+            tableLoading: true,
             primaryKey: "ResultId",
             tabs: [
               {
@@ -2460,8 +2466,8 @@ var Helpers = (function (){
                 transform: Helpers.toDateTimeString
               },
               {
-                fieldid: "statusText", //'RightsProtectionStatus',
-                visibleInTabs: ["tab_all"],
+                fieldid: "RightsProtectionStatus", //'',
+                visibleInTabs: ["tab_all","tab_pending"],
                 transform: function(value, entry) {
                   if (
                     true === wna.IsNullOrEmpty(entry) ||
@@ -2490,11 +2496,12 @@ var Helpers = (function (){
                       styleclass = "";
                       break;
                   }
+                  // debugger;
                   return (
                     '<div class="status ' +
                     styleclass +
                     '"><span>' +
-                    value +
+                    entry.RightsProtectionStatusContent +
                     "</span></div>"
                   );
                 }
@@ -2708,6 +2715,16 @@ var Helpers = (function (){
         isDisabled: false,
         channelIdAndNameMap: {},
       };
+    },
+    watch: {
+      locale: {
+        deep: true,
+        handler: function(val) {
+          this.dashboardModel.trendChart.series[0].name = this.locale.valuesMapping.DiscriminantResult[0]
+          this.dashboardModel.barChart1.series[0].name = this.locale.valuesMapping.DiscriminantResult[1];
+          this.dashboardModel.barChart1.series[1].name = this.locale.valuesMapping.DiscriminantResult[0];
+        }
+      },
     },
     mounted() {
       
@@ -3129,6 +3146,7 @@ var Helpers = (function (){
           series: [
             {
               color: "rgb(244,115,115)",
+              // localeForSubview
               name: this.locale.valuesMapping.DiscriminantResult[0],
               data: organizedData,
             }
@@ -3366,8 +3384,11 @@ var Helpers = (function (){
         let hasData = true !== wna.IsNullOrEmpty(ev.detail);
         let start = true === hasData ? ev.detail.start : null;
         let end = true === hasData && null !== start ? ev.detail.end : null;
-        thisvue.viewState.start_date = (true !== wna.IsNullOrEmpty(start)) ? start.format('YYYY-MM-DD 00:00:00') : '';
-        thisvue.viewState.end_date = (true !== wna.IsNullOrEmpty(end)) ? end.format('YYYY-MM-DD 23:59:59') : '';
+        if(start && end ) {
+          thisvue.viewState.start_date =start.format('YYYY-MM-DD 00:00:00');
+          thisvue.viewState.end_date =end.format('YYYY-MM-DD 23:59:59');
+        }
+        
         console.log("------- onDateRangeChange >", thisvue.path, ev.detail);
         thisvue.requestTabAndDropdownData();
         thisvue.requestDashboardData({});

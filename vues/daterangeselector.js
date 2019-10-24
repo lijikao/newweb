@@ -285,10 +285,10 @@
         console.log(brandData)
         if(brandData.indexOf("all")>= 0){
             window.brandData = '';
-            this.saveDateRange(window.startTimes,window.endTimes);
+            this.saveDateRange();
         }else {
             window.brandData = brandData;
-            this.saveDateRange(window.startTimes,window.endTimes);
+            this.saveDateRange();
         }
         this.isSCreen = false;
       },

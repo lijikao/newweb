@@ -29,7 +29,7 @@
         data: function(){
             return {
                 viewState: {
-                    selectedTab: null,
+                    selectedTab: "tab_all",
                     model4Tab: {}
                 }
             };

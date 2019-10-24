@@ -17,11 +17,13 @@
         xAxis: [
             {
                 type: 'time',                     //!!! may be configured via viewModel
-                boundaryGap: false,                   
+                boundaryGap: [0.1,0.1],  
+                minInterval: 3600 * 24 * 1000 ,                
                 axisLabel: {
                     color: 'rgba(51,51,51,.4)',
-                    formatter: function(val) {
-                        return moment(val).format("YYYY")+'\n'+moment(val).format("MM-DD")
+                    formatter: function(val,idx) {
+                        // if(idx===0) return '';
+                        return moment(val).format("YYYY")+'\n'+moment(val).format("MM-DD");
                     } 
                 },
                 axisTick: {
@@ -34,11 +36,13 @@
                         color: '#EAEAEA'
                     }
                 },
-                // min: function(value) {
-                //     let date = new Date(value);
-                //     date.setDate(date.getDate()-4);
-                //     return date.getMilliseconds();
-                // }
+                splitLine: {show:false},
+                min: function(value) {
+                    return value.min - (3600 * 24 * 1000);
+                },
+                max: function(value) {
+                    return value.max + (3600 * 24 * 1000);
+                }
                 //data: ['京东', '考拉', '淘宝', '天猫'],       //!!! should be loaded from model
             }
         ],
@@ -125,11 +129,7 @@
                 });
             });
         }
-
         opts = _.merge(opts, _echartsOptions, {
-            xAxis:[{
-                data: xData,
-            }],
             series: series,
             legend: {
                 data: legends,
@@ -232,7 +232,9 @@
         },
         beforeMount: function(){
             
-        }
+        },
+        updated: function(){
+        },
 
     });
 })();

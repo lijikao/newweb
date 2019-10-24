@@ -176,6 +176,8 @@
         computed: {
            
         },
+        watch: {
+        },
         methods: {
             tableviewModelChange: function (query, opt) {
                 /*
@@ -484,8 +486,10 @@
                 let hasData = (true !== wna.IsNullOrEmpty(ev.detail));
                 let start = (true === hasData) ? ev.detail.start : null;
                 let end = (true === hasData) && (null !== start) ? ev.detail.end : null;
-                thisvue.viewState.start_date = (true !== wna.IsNullOrEmpty(start)) ? start.format('YYYY-MM-DD 00:00:00') : '';
-                thisvue.viewState.end_date = (true !== wna.IsNullOrEmpty(end)) ? end.format('YYYY-MM-DD 23:59:59') : '';
+                if(start && end ) {
+                    thisvue.viewState.start_date =start.format('YYYY-MM-DD 00:00:00');
+                    thisvue.viewState.end_date =end.format('YYYY-MM-DD 23:59:59');
+                  }
                 console.log('------- onDateRangeChange >', thisvue.path, ev.detail);
                 // thisvue.$emit('request-data', thisvue.path, start, end, {keys: ['channel', 'series', 'model']}, thisvue.onRequestReturned, thisvue);
                 thisvue.requestTabAndDropdownData();
