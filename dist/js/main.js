@@ -129,20 +129,56 @@
                 });
             });
         }
-        opts = _.merge(opts, _echartsOptions, {
-            series: series,
-            legend: {
-                data: legends,
-                itemWidth: 10,
-                itemHeight: 10,
-                left: 'left'
-            }
-        });
+        // category case:设计稿中模块为共享，但源码及后端数据为不同模块图表，这里进行了强行条件判断！！！！注意
+        if(xData) {
+            // for counterfeitStore trendchart
+            _echartsOptions.xAxis = {};
+            opts = _.merge(opts, _echartsOptions, {
+                xAxis: {
+                        type: 'category',                     //!!! may be configured via viewModel              
+                        axisLabel: {
+                            color: 'rgba(51,51,51,.4)',
+                            // formatter: function(val,idx) {
+                            //     // if(idx===0) return '';
+                            //     return moment(val).format("YYYY")+'\n'+moment(val).format("MM-DD");
+                            // } 
+                        },
+                        axisTick: {
+                            show: true,
+                            alignWithLabel: true
+                        },
+                        axisLine: {
+                            show: false,
+                            lineStyle: {
+                                color: '#EAEAEA'
+                            }
+                        },
+                        splitLine: {show:false},
+
+                        data: xData,       //!!! should be loaded from model
+                    },
+                series: series,
+                legend: {
+                }
+            });
+        }else{
+            // for counterfeitProduct trendchart
+            opts = _.merge(opts, _echartsOptions, {
+                series: series,
+                legend: {
+                    data: legends,
+                    itemWidth: 10,
+                    itemHeight: 10,
+                    left: 'left'
+                }
+            });
+            opts.xAxis[0].data = (true !== wna.IsNullOrEmpty(model)) ? model.categories : [];
+        }
+        
 
         console.log('-------------important')
         console.log(model)
 
-        opts.xAxis[0].data = (true !== wna.IsNullOrEmpty(model)) ? model.categories : [];
         return opts;
     };
 
@@ -1924,23 +1960,54 @@ var Helpers = (function (){
                     }
                 });
             },
+            // buildTrendChartSeries: function(metaData){
+            //     // trap: 如果出现不干净数据，同一个渠道被多次重复，可借鉴conterfeitproduct中的barchart2的方法修改
+            //     let organizedDataTemplate = {
+            //       channelId: [],
+            //       shopCount: [],
+            //       channelName: [],
+            //     };
+            //     let organizedData = metaData.reduce((acc,val) => {
+            //         acc.channelId.push(val.FakeShopStatusByChannel_ChannelId);
+            //         acc.channelName.push(val.FakeShopStatusByChannel_ChannelName);
+            //         acc.shopCount.push(val.FakeShopStatusByChannel_ShopCount);
+            //         return acc;
+            //     },organizedDataTemplate)
+            //     this.dashboardModel.trendChart = {
+            //       x: organizedData.channelName,
+            //       series: [
+            //         {
+            //           color: "rgb(244,115,115)",
+            //           name: organizedData.channelName,
+            //           data: organizedData.shopCount,
+            //         }
+            //       ],
+            //     }
+            //     console.log('new------- counterfeit store trendChart model: ', {
+            //         x:organizedData.channelId,
+            //         series: organizedData.shopCount,
+            //       });
+            // },
             buildTrendChartSeries: function(metaData){
                 // trap: 如果出现不干净数据，同一个渠道被多次重复，可借鉴conterfeitproduct中的barchart2的方法修改
                 let organizedDataTemplate = {
                   channelId: [],
                   shopCount: [],
+                  channelName: [],
                 };
                 let organizedData = metaData.reduce((acc,val) => {
                     acc.channelId.push(val.FakeShopStatusByChannel_ChannelId);
+                    acc.channelName.push(val.FakeShopStatusByChannel_ChannelName);
                     acc.shopCount.push(val.FakeShopStatusByChannel_ShopCount);
                     return acc;
                 },organizedDataTemplate)
                 this.dashboardModel.trendChart = {
-                  x: organizedData.channelId,
+                  x: organizedData.channelName,
                   series: [
                     {
                       color: "rgb(244,115,115)",
                       data: organizedData.shopCount,
+                      type: 'bar',
                     }
                   ],
                 }

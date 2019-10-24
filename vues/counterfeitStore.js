@@ -335,23 +335,54 @@
                     }
                 });
             },
+            // buildTrendChartSeries: function(metaData){
+            //     // trap: 如果出现不干净数据，同一个渠道被多次重复，可借鉴conterfeitproduct中的barchart2的方法修改
+            //     let organizedDataTemplate = {
+            //       channelId: [],
+            //       shopCount: [],
+            //       channelName: [],
+            //     };
+            //     let organizedData = metaData.reduce((acc,val) => {
+            //         acc.channelId.push(val.FakeShopStatusByChannel_ChannelId);
+            //         acc.channelName.push(val.FakeShopStatusByChannel_ChannelName);
+            //         acc.shopCount.push(val.FakeShopStatusByChannel_ShopCount);
+            //         return acc;
+            //     },organizedDataTemplate)
+            //     this.dashboardModel.trendChart = {
+            //       x: organizedData.channelName,
+            //       series: [
+            //         {
+            //           color: "rgb(244,115,115)",
+            //           name: organizedData.channelName,
+            //           data: organizedData.shopCount,
+            //         }
+            //       ],
+            //     }
+            //     console.log('new------- counterfeit store trendChart model: ', {
+            //         x:organizedData.channelId,
+            //         series: organizedData.shopCount,
+            //       });
+            // },
             buildTrendChartSeries: function(metaData){
                 // trap: 如果出现不干净数据，同一个渠道被多次重复，可借鉴conterfeitproduct中的barchart2的方法修改
                 let organizedDataTemplate = {
                   channelId: [],
                   shopCount: [],
+                  channelName: [],
                 };
                 let organizedData = metaData.reduce((acc,val) => {
                     acc.channelId.push(val.FakeShopStatusByChannel_ChannelId);
+                    acc.channelName.push(val.FakeShopStatusByChannel_ChannelName);
                     acc.shopCount.push(val.FakeShopStatusByChannel_ShopCount);
                     return acc;
                 },organizedDataTemplate)
                 this.dashboardModel.trendChart = {
-                  x: organizedData.channelId,
+                  x: organizedData.channelName,
                   series: [
                     {
                       color: "rgb(244,115,115)",
                       data: organizedData.shopCount,
+                      type: 'bar',
                     }
                   ],
                 }
