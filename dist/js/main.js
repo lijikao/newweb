@@ -2833,7 +2833,7 @@ var Helpers = (function (){
             that.shutTableLoader();
           },
           error: function(response) {
-
+            alert("表格数据加载失败");
           }
         });
       },
@@ -2897,7 +2897,7 @@ var Helpers = (function (){
             console.log(rex.results)
           },
           error: function(response) {
-
+            alert("显示信息加载失败");
           }
         });
       },
@@ -2939,7 +2939,7 @@ var Helpers = (function (){
             console.log(rex)
           },
           error: function(response) {
-
+            alert("dashboard加载失败");
           }
         });
       },
