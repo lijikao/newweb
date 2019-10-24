@@ -125,7 +125,7 @@
                 return _.merge(val, {
                     type: 'bar',
                     barGap: '50%',
-                    barWidth: '40%',
+                    barWidth: '20%',
                 });
             });
         }
