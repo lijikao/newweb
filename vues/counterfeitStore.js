@@ -162,13 +162,7 @@
                         ]
                     },
                     trendChart:{
-                        xAxis: {
-                            type: 'category',
-                            boundaryGap: false,
-                        },
-                        yAxis: {
-                            type: 'value',
-                        }
+                        type:'line',
                     }
                 }
             }
@@ -335,62 +329,45 @@
                     }
                 });
             },
-            // buildTrendChartSeries: function(metaData){
-            //     // trap: 如果出现不干净数据，同一个渠道被多次重复，可借鉴conterfeitproduct中的barchart2的方法修改
-            //     let organizedDataTemplate = {
-            //       channelId: [],
-            //       shopCount: [],
-            //       channelName: [],
-            //     };
-            //     let organizedData = metaData.reduce((acc,val) => {
-            //         acc.channelId.push(val.FakeShopStatusByChannel_ChannelId);
-            //         acc.channelName.push(val.FakeShopStatusByChannel_ChannelName);
-            //         acc.shopCount.push(val.FakeShopStatusByChannel_ShopCount);
-            //         return acc;
-            //     },organizedDataTemplate)
-            //     this.dashboardModel.trendChart = {
-            //       x: organizedData.channelName,
-            //       series: [
-            //         {
-            //           color: "rgb(244,115,115)",
-            //           name: organizedData.channelName,
-            //           data: organizedData.shopCount,
-            //         }
-            //       ],
-            //     }
-            //     console.log('new------- counterfeit store trendChart model: ', {
-            //         x:organizedData.channelId,
-            //         series: organizedData.shopCount,
-            //       });
-            // },
             buildTrendChartSeries: function(metaData){
                 // trap: 如果出现不干净数据，同一个渠道被多次重复，可借鉴conterfeitproduct中的barchart2的方法修改
-                let organizedDataTemplate = {
-                  channelId: [],
-                  shopCount: [],
-                  channelName: [],
-                };
-                let organizedData = metaData.reduce((acc,val) => {
-                    acc.channelId.push(val.FakeShopStatusByChannel_ChannelId);
-                    acc.channelName.push(val.FakeShopStatusByChannel_ChannelName);
-                    acc.shopCount.push(val.FakeShopStatusByChannel_ShopCount);
-                    return acc;
-                },organizedDataTemplate)
-                this.dashboardModel.trendChart = {
-                  x: organizedData.channelName,
-                  series: [
-                    {
-                      color: "rgb(244,115,115)",
-                      data: organizedData.shopCount,
-                      type: 'bar',
+                let colorPallet = [
+                    '#F47373',
+                    '#24CCB8',
+                    '#7290F2',
+                    '#8C7BED',
+                    '#F49256',
+                ];
+                let halfOrganizedData = metaData.map((val) => {
+                    return {
+                        channelId: val.FakeShopStatusByChannel_ChannelId,
+                        name: val.FakeShopStatusByChannel_ChannelName,
+                        data: [moment(val.FakeShopStatusByChannel_DiscriminantTime).toDate(),val.FakeShopStatusByChannel_ShopCount]
                     }
-                  ],
+                });
+                let organizedData = halfOrganizedData.reduce((acc,val) => {
+                    
+                    if(!_.find(acc,(o) => o.name == val.name)) {
+                        acc.push({
+                            color: colorPallet[acc.length%5],
+                            name: val.name,
+                            data: [val.data],                                
+                        })       
+                    }else{
+                        let bucket = _.find(acc, (o) => o.name = val.name);
+                        bucket.data.push(val.data);
+                    }
+                    return acc;
+                },[])
+                this.dashboardModel.trendChart = {
+                  series: organizedData,
                 }
                 console.log('new------- counterfeit store trendChart model: ', {
                     x:organizedData.channelId,
                     series: organizedData.shopCount,
                   });
             },
+            
             localeForSubview: function(subviewname){
                 let ret =  _.extend({ common: this.sharedLocale.common}, this.locale[subviewname]);
                 return ret;

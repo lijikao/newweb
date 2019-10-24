@@ -37,12 +37,13 @@
                     }
                 },
                 splitLine: {show:false},
-                min: function(value) {
-                    return value.min - (3600 * 24 * 1000);
-                },
-                max: function(value) {
-                    return value.max + (3600 * 24 * 1000);
-                }
+                //如果需要padding可将下面打开，
+                // min: function(value) {
+                //     return value.min - (3600 * 24 * 1000);
+                // },
+                // max: function(value) {
+                //     return value.max + (3600 * 24 * 1000);
+                // }
                 //data: ['京东', '考拉', '淘宝', '天猫'],       //!!! should be loaded from model
             }
         ],
@@ -123,62 +124,27 @@
             series = _.map(model.series, (val) => {
                 legends.push(val.name);
                 return _.merge(val, {
-                    type: 'bar',
+                    type: viewModel.type,
                     barGap: '50%',
                     barWidth: '20%',
                 });
             });
         }
-        // category case:设计稿中模块为共享，但源码及后端数据为不同模块图表，这里进行了强行条件判断！！！！注意
-        if(xData) {
-            // for counterfeitStore trendchart
-            _echartsOptions.xAxis = {};
-            opts = _.merge(opts, _echartsOptions, {
-                xAxis: {
-                        type: 'category',                     //!!! may be configured via viewModel              
-                        axisLabel: {
-                            color: 'rgba(51,51,51,.4)',
-                            // formatter: function(val,idx) {
-                            //     // if(idx===0) return '';
-                            //     return moment(val).format("YYYY")+'\n'+moment(val).format("MM-DD");
-                            // } 
-                        },
-                        axisTick: {
-                            show: true,
-                            alignWithLabel: true
-                        },
-                        axisLine: {
-                            show: false,
-                            lineStyle: {
-                                color: '#EAEAEA'
-                            }
-                        },
-                        splitLine: {show:false},
-
-                        data: xData,       //!!! should be loaded from model
-                    },
-                series: series,
-                legend: {
-                }
-            });
-        }else{
-            // for counterfeitProduct trendchart
-            opts = _.merge(opts, _echartsOptions, {
-                series: series,
-                legend: {
-                    data: legends,
-                    itemWidth: 10,
-                    itemHeight: 10,
-                    left: 'left'
-                }
-            });
-            opts.xAxis[0].data = (true !== wna.IsNullOrEmpty(model)) ? model.categories : [];
-        }
-        
+        // category case
+        opts = _.merge(opts, _echartsOptions, {
+            series: series,
+            legend: {
+                data: legends,
+                itemWidth: 10,
+                itemHeight: 10,
+                left: 'left'
+            }
+        });
 
         console.log('-------------important')
         console.log(model)
 
+        opts.xAxis[0].data = (true !== wna.IsNullOrEmpty(model)) ? model.categories : [];
         return opts;
     };
 

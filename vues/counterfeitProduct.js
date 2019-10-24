@@ -535,13 +535,7 @@
             ]
           },
           trendChart: {
-            xAxis: {
-              type: "category",
-              boundaryGap: false
-            },
-            yAxis: {
-              type: "value"
-            }
+            type: 'bar'
           }
         },
         testBar: {
@@ -1176,10 +1170,10 @@
       buildFakesByChannelBarChartSeries: function(metaData) {
          //orgnize metadata
         let series = metaData.reduce((acc,val) => {
-          let dupIndex = acc.channels.indexOf(val.FakeProductStatusByChannel_ChanelId)
+          let dupIndex = acc.channels.indexOf(val.FakeProductStatusByChannel_ChanelName)
           // 根据channel 合并去重，同时重组
           if( dupIndex < 0){
-            acc.channels.push(val.FakeProductStatusByChannel_ChanelId)
+            acc.channels.push(val.FakeProductStatusByChannel_ChanelName)
             acc.fakeCounts.push(val.FakeProductStatusByChannel_DiscriminantResult)
             acc.realCounts.push(val.FakeProductStatusByChannel_ProductCount)
           }else{
@@ -1194,11 +1188,7 @@
         })
         //  2) Construct the bar-chart model
         let barChart1Model = {
-          categories: series.channels.map(val => {
-            console.log("----series",val)
-            console.log("----series",this.channelIdAndNameMap[val])
-            return this.channelIdAndNameMap[val]
-          }),
+          categories: series.channels,
           series: [
             {
               name: this.locale.valuesMapping.DiscriminantResult[1],

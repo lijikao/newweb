@@ -37,12 +37,13 @@
                     }
                 },
                 splitLine: {show:false},
-                min: function(value) {
-                    return value.min - (3600 * 24 * 1000);
-                },
-                max: function(value) {
-                    return value.max + (3600 * 24 * 1000);
-                }
+                //如果需要padding可将下面打开，
+                // min: function(value) {
+                //     return value.min - (3600 * 24 * 1000);
+                // },
+                // max: function(value) {
+                //     return value.max + (3600 * 24 * 1000);
+                // }
                 //data: ['京东', '考拉', '淘宝', '天猫'],       //!!! should be loaded from model
             }
         ],
@@ -123,62 +124,27 @@
             series = _.map(model.series, (val) => {
                 legends.push(val.name);
                 return _.merge(val, {
-                    type: 'bar',
+                    type: viewModel.type,
                     barGap: '50%',
                     barWidth: '20%',
                 });
             });
         }
-        // category case:设计稿中模块为共享，但源码及后端数据为不同模块图表，这里进行了强行条件判断！！！！注意
-        if(xData) {
-            // for counterfeitStore trendchart
-            _echartsOptions.xAxis = {};
-            opts = _.merge(opts, _echartsOptions, {
-                xAxis: {
-                        type: 'category',                     //!!! may be configured via viewModel              
-                        axisLabel: {
-                            color: 'rgba(51,51,51,.4)',
-                            // formatter: function(val,idx) {
-                            //     // if(idx===0) return '';
-                            //     return moment(val).format("YYYY")+'\n'+moment(val).format("MM-DD");
-                            // } 
-                        },
-                        axisTick: {
-                            show: true,
-                            alignWithLabel: true
-                        },
-                        axisLine: {
-                            show: false,
-                            lineStyle: {
-                                color: '#EAEAEA'
-                            }
-                        },
-                        splitLine: {show:false},
-
-                        data: xData,       //!!! should be loaded from model
-                    },
-                series: series,
-                legend: {
-                }
-            });
-        }else{
-            // for counterfeitProduct trendchart
-            opts = _.merge(opts, _echartsOptions, {
-                series: series,
-                legend: {
-                    data: legends,
-                    itemWidth: 10,
-                    itemHeight: 10,
-                    left: 'left'
-                }
-            });
-            opts.xAxis[0].data = (true !== wna.IsNullOrEmpty(model)) ? model.categories : [];
-        }
-        
+        // category case
+        opts = _.merge(opts, _echartsOptions, {
+            series: series,
+            legend: {
+                data: legends,
+                itemWidth: 10,
+                itemHeight: 10,
+                left: 'left'
+            }
+        });
 
         console.log('-------------important')
         console.log(model)
 
+        opts.xAxis[0].data = (true !== wna.IsNullOrEmpty(model)) ? model.categories : [];
         return opts;
     };
 
@@ -1787,13 +1753,7 @@ var Helpers = (function (){
                         ]
                     },
                     trendChart:{
-                        xAxis: {
-                            type: 'category',
-                            boundaryGap: false,
-                        },
-                        yAxis: {
-                            type: 'value',
-                        }
+                        type:'line',
                     }
                 }
             }
@@ -1960,62 +1920,45 @@ var Helpers = (function (){
                     }
                 });
             },
-            // buildTrendChartSeries: function(metaData){
-            //     // trap: 如果出现不干净数据，同一个渠道被多次重复，可借鉴conterfeitproduct中的barchart2的方法修改
-            //     let organizedDataTemplate = {
-            //       channelId: [],
-            //       shopCount: [],
-            //       channelName: [],
-            //     };
-            //     let organizedData = metaData.reduce((acc,val) => {
-            //         acc.channelId.push(val.FakeShopStatusByChannel_ChannelId);
-            //         acc.channelName.push(val.FakeShopStatusByChannel_ChannelName);
-            //         acc.shopCount.push(val.FakeShopStatusByChannel_ShopCount);
-            //         return acc;
-            //     },organizedDataTemplate)
-            //     this.dashboardModel.trendChart = {
-            //       x: organizedData.channelName,
-            //       series: [
-            //         {
-            //           color: "rgb(244,115,115)",
-            //           name: organizedData.channelName,
-            //           data: organizedData.shopCount,
-            //         }
-            //       ],
-            //     }
-            //     console.log('new------- counterfeit store trendChart model: ', {
-            //         x:organizedData.channelId,
-            //         series: organizedData.shopCount,
-            //       });
-            // },
             buildTrendChartSeries: function(metaData){
                 // trap: 如果出现不干净数据，同一个渠道被多次重复，可借鉴conterfeitproduct中的barchart2的方法修改
-                let organizedDataTemplate = {
-                  channelId: [],
-                  shopCount: [],
-                  channelName: [],
-                };
-                let organizedData = metaData.reduce((acc,val) => {
-                    acc.channelId.push(val.FakeShopStatusByChannel_ChannelId);
-                    acc.channelName.push(val.FakeShopStatusByChannel_ChannelName);
-                    acc.shopCount.push(val.FakeShopStatusByChannel_ShopCount);
-                    return acc;
-                },organizedDataTemplate)
-                this.dashboardModel.trendChart = {
-                  x: organizedData.channelName,
-                  series: [
-                    {
-                      color: "rgb(244,115,115)",
-                      data: organizedData.shopCount,
-                      type: 'bar',
+                let colorPallet = [
+                    '#F47373',
+                    '#24CCB8',
+                    '#7290F2',
+                    '#8C7BED',
+                    '#F49256',
+                ];
+                let halfOrganizedData = metaData.map((val) => {
+                    return {
+                        channelId: val.FakeShopStatusByChannel_ChannelId,
+                        name: val.FakeShopStatusByChannel_ChannelName,
+                        data: [moment(val.FakeShopStatusByChannel_DiscriminantTime).toDate(),val.FakeShopStatusByChannel_ShopCount]
                     }
-                  ],
+                });
+                let organizedData = halfOrganizedData.reduce((acc,val) => {
+                    
+                    if(!_.find(acc,(o) => o.name == val.name)) {
+                        acc.push({
+                            color: colorPallet[acc.length%5],
+                            name: val.name,
+                            data: [val.data],                                
+                        })       
+                    }else{
+                        let bucket = _.find(acc, (o) => o.name = val.name);
+                        bucket.data.push(val.data);
+                    }
+                    return acc;
+                },[])
+                this.dashboardModel.trendChart = {
+                  series: organizedData,
                 }
                 console.log('new------- counterfeit store trendChart model: ', {
                     x:organizedData.channelId,
                     series: organizedData.shopCount,
                   });
             },
+            
             localeForSubview: function(subviewname){
                 let ret =  _.extend({ common: this.sharedLocale.common}, this.locale[subviewname]);
                 return ret;
@@ -2723,13 +2666,7 @@ var Helpers = (function (){
             ]
           },
           trendChart: {
-            xAxis: {
-              type: "category",
-              boundaryGap: false
-            },
-            yAxis: {
-              type: "value"
-            }
+            type: 'bar'
           }
         },
         testBar: {
@@ -3364,10 +3301,10 @@ var Helpers = (function (){
       buildFakesByChannelBarChartSeries: function(metaData) {
          //orgnize metadata
         let series = metaData.reduce((acc,val) => {
-          let dupIndex = acc.channels.indexOf(val.FakeProductStatusByChannel_ChanelId)
+          let dupIndex = acc.channels.indexOf(val.FakeProductStatusByChannel_ChanelName)
           // 根据channel 合并去重，同时重组
           if( dupIndex < 0){
-            acc.channels.push(val.FakeProductStatusByChannel_ChanelId)
+            acc.channels.push(val.FakeProductStatusByChannel_ChanelName)
             acc.fakeCounts.push(val.FakeProductStatusByChannel_DiscriminantResult)
             acc.realCounts.push(val.FakeProductStatusByChannel_ProductCount)
           }else{
@@ -3382,11 +3319,7 @@ var Helpers = (function (){
         })
         //  2) Construct the bar-chart model
         let barChart1Model = {
-          categories: series.channels.map(val => {
-            console.log("----series",val)
-            console.log("----series",this.channelIdAndNameMap[val])
-            return this.channelIdAndNameMap[val]
-          }),
+          categories: series.channels,
           series: [
             {
               name: this.locale.valuesMapping.DiscriminantResult[1],
