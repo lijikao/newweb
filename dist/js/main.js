@@ -1294,6 +1294,9 @@ var Helpers = (function (){
       displayedScreenSlide(){
         return this.isAllTag ? ['ALL'] : this.screenSLideData;
       },
+      allowOKBtn() {
+        
+      }
     },
     watch: {
       screenData: {
@@ -1308,6 +1311,7 @@ var Helpers = (function (){
       }
     },
     destroyed: function() {
+      alert("unmounted model")
     },
     mounted: function() {
         window.brandData='';
@@ -1402,12 +1406,11 @@ var Helpers = (function (){
         });
         brandData = str.slice(0,str.length-1);
         if(brandData.indexOf("all")==0){
-          //为了不匹配任何
             window.brandData = '';
             that.saveDateRange(window.startTimes,window.endTimes);
-        }else {
-            window.brandData = brandData;
-            that.saveDateRange(window.startTimes,window.endTimes);
+          }else {
+              window.brandData = brandData;
+              that.saveDateRange(window.startTimes,window.endTimes);
         }
       });
       var that =this;
@@ -2744,6 +2747,7 @@ var Helpers = (function (){
       },
     },
     destroyed: function() {
+      alert("unmounted")
     },
     mounted() {
       

@@ -387,3 +387,7 @@ button.btn img {
   text-align: center;
   min-width: 104px;
 }
+.screen-menu .screen-btn button.btn-disabled {
+  background-color: #818181;
+  pointer-events: none;
+}
