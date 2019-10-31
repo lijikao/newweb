@@ -1218,6 +1218,10 @@ button.signupbtn{
   float: none;
   border: none;
 }
+.screen-menu .screen-btn button.btn-disabled {
+  background-color: #bebebe;
+  pointer-events: none;
+}
 .datetimeselector {
   height: auto;
   overflow: hidden;

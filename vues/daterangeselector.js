@@ -21,11 +21,7 @@
                     </ul>
                 </div>
                 <div class="screen-btn">
-<<<<<<< HEAD
                     <button type="" :class="{'btn-disabled':disableConfirmBtn}" @click="screenBtnClick">OK</button>
-=======
-                    <button type="" @click="screenBtnClick">{{locale.screenbtn}}</button>
->>>>>>> origin/dev
                 </div>
             </div>
             </div>
