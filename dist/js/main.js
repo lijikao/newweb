@@ -1246,10 +1246,10 @@ var Helpers = (function (){
             <i class="screen-icon" @click="changeScreen"></i>
             <div class="screen-box" v-show="isSCreen">
             <div class="screen-menu">
-                <h2>Brand</h2>
+                <h2>{{locale.screenh}}</h2>
                 <div class="screen-menu-search-box">
                     <span></span>
-                <input type="text" class="screen-menu-search" v-model="screenInputValue" placeholder="Search" @keyup="screenInputFunction">
+                <input type="text" class="screen-menu-search" v-model="screenInputValue" :placeholder="locale.screensearch" @keyup="screenInputFunction">
                 </div>
                 <div class="screen-list">
                     <ul>
@@ -1257,7 +1257,7 @@ var Helpers = (function (){
                     </ul>
                 </div>
                 <div class="screen-btn">
-                    <button type="" @click="screenBtnClick">OK</button>
+                    <button type="" @click="screenBtnClick">{{locale.screenbtn}}</button>
                 </div>
             </div>
             </div>
@@ -2175,8 +2175,8 @@ var Helpers = (function (){
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <span class="modal-success-icon"></span>
-                                    <h3>Sorry, the complaint balance is insufficient</h3>
-                                    <p>If you want to get more complaints, you can get more complaints through data feedback</p>
+                                    <h3>{{locale.quotah3}}</h3>
+                                    <p>{{locale.quotap}}</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" @click="$('#complaints-insufficient-quota').modal('hide')">OK</button>
@@ -2191,8 +2191,8 @@ var Helpers = (function (){
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <span class="modal-success-icon"></span>
-                                    <h3>Do you confirm the complaint?</h3>
-                                    <p>You have {{balance}} </p>
+                                    <h3>{{locale.normalh3}}</h3>
+                                    <p>{{locale.normalp}}{{balance}} </p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" @click="normalQuota">OK</button>
@@ -2205,8 +2205,8 @@ var Helpers = (function (){
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <span class="modal-success-icon"></span>
-                                    <h3>Sorry，You don't have permission</h3>
-                                    <p>If you need permission to file a complaint, you can contact simplybrand for permission to file a complaint</p>
+                                    <h3>{{locale.authorityh3}}</h3>
+                                    <p>{{locale.authorityp}}</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" @click="$("#complaints-insufficient-quota").modal('hide');">OK</button>
@@ -2219,8 +2219,8 @@ var Helpers = (function (){
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <span class="modal-success-icon"></span>
-                                    <h3>Successfully !</h3>
-                                    <p>We have received your feedback and suggestions successfully. You have received a quota for this feedback.</p>
+                                    <h3>{{locale.complaintsh3}}</h3>
+                                    <p>{{locale.complaintsp}}</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" @click="$('#complaints-success').modal('hide');">OK</button>
@@ -2233,8 +2233,8 @@ var Helpers = (function (){
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <span class="modal-success-icon"></span>
-                                    <h3>Successfully !</h3>
-                                    <p>We have received your feedback and suggestions successfully. You have received a quota for this feedback.</p>
+                                    <h3>{{locale.receivedh3}}</h3>
+                                    <p>{{locale.receivedp}}</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" @click="$('#received-success').modal('hide');">OK</button>
@@ -2246,24 +2246,24 @@ var Helpers = (function (){
                           <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Feedback</h4>
+                                <h4 class="modal-title">{{locale.feedbackh4}}</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                              </div>
                                 <div class="modal-body">
                                     <form role="form">
                                         <div class="form-group">
-                                            <p>Data Feedback</p>
+                                            <p>{{locale.feedbackp}}</p>
                                             <button type="button" v-for="site in feedbackOptions" :id="site.id"  :class="[{'disabled':isDisabled},{'active':feedbackBtnId==site.id}]" class="feedback-check btn btn-default" @click="feetbackBtnClick(site.id)">{{site.label}}</button>
-                                            <p v-if="isDisabled">You have not selected any data, so you can't select the question label at this time. Please select the data and try again.</p>
+                                            <p v-if="isDisabled">{{locale.feedbackpp}}</p>
                                         </div>
                                         <div class="form-group">
-                                        <p for="textarea">System Feedback</p>
+                                        <p for="textarea">{{locale.feedbacktextarea}}</p>
                                         <textarea class="form-control" rows="5" v-model="feedbackTextarea" placeHolder="Please fill in the feedback"  style="resize:none;"></textarea>
                                     </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" @click="$('#feedback').modal('hide');">Cancel</button><button type="button" class="btn btn-primary" @click="feedbackCommit">Sure</button>
+                                    <button type="button" class="btn btn-primary" @click="$('#feedback').modal('hide');">{{locale.feedbackbtn1}}</button><button type="button" class="btn btn-primary" @click="feedbackCommit">{{locale.feedbackbtn2}}</button>
                                 </div>
                             </div>
                         </div>

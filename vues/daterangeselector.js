@@ -10,10 +10,10 @@
             <i class="screen-icon" @click="changeScreen"></i>
             <div class="screen-box" v-show="isSCreen">
             <div class="screen-menu">
-                <h2>Brand</h2>
+                <h2>{{locale.screenh}}</h2>
                 <div class="screen-menu-search-box">
                     <span></span>
-                <input type="text" class="screen-menu-search" v-model="screenInputValue" placeholder="Search" @keyup="screenInputFunction">
+                <input type="text" class="screen-menu-search" v-model="screenInputValue" :placeholder="locale.screensearch" @keyup="screenInputFunction">
                 </div>
                 <div class="screen-list">
                     <ul>
@@ -21,7 +21,7 @@
                     </ul>
                 </div>
                 <div class="screen-btn">
-                    <button type="" @click="screenBtnClick">OK</button>
+                    <button type="" @click="screenBtnClick">{{locale.screenbtn}}</button>
                 </div>
             </div>
             </div>

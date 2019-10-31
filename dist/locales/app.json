@@ -19,7 +19,10 @@
                 "days7": "近7天",
                 "days15": "近15天",
                 "days30": "近30天",
-                "caption": "时间："
+                "caption": "时间：",
+                "screenh":"品牌",
+                "screensearch":"搜索",
+                "screenbtn":"确认"
             },
             "common": {
                 "option_all": "全部",
@@ -49,7 +52,10 @@
                 "days7": "Last 7 days",
                 "days15": "Last 15 days",
                 "days30": "Last 30 days",
-                "caption": "Time："
+                "caption": "Time：",
+                "screenh":"Brand",
+                "screensearch":"Search",
+                "screenbtn":"OK"
             },
             "common": {
                 "option_all": "All",
