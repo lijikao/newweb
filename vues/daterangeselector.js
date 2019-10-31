@@ -8,7 +8,8 @@
             <button type="button" value="15">{{locale.days15}}</button>
             <button type="button" value="30">{{locale.days30}}</button>
             <i class="screen-icon" @click="changeScreen"></i>
-            <div class="screen-menu" v-show="isSCreen">
+            <div class="screen-box" v-show="isSCreen">
+            <div class="screen-menu">
                 <h2>Brand</h2>
                 <div class="screen-menu-search-box">
                     <span></span>
@@ -22,6 +23,7 @@
                 <div class="screen-btn">
                     <button type="" @click="screenBtnClick">OK</button>
                 </div>
+            </div>
             </div>
             <div class="screen-slide" v-if="screenSLideData[0]">
                 <h2>Brand:</h2>

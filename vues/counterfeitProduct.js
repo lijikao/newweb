@@ -130,7 +130,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Cancel</button><button type="button" class="btn btn-primary" @click="feedbackCommit">Sure</button>
+                                    <button type="button" class="btn btn-primary" @click="$('#feedback').modal('hide');">Cancel</button><button type="button" class="btn btn-primary" @click="feedbackCommit">Sure</button>
                                 </div>
                             </div>
                         </div>
@@ -452,6 +452,9 @@
                   "tab_failed"
                 ],
                 callback: function(selection) {
+                  if (true === wna.IsNullOrEmpty(selection)) {
+                    return;
+                  }
                   var selectionData = selection;
                   window.selectionData = selectionData;
                   if (true === wna.IsNullOrEmpty(selection)) {
@@ -1332,6 +1335,7 @@
         // $('#complaints-no-authority').modal();
         // $("#feedback").modal("hide");
         //发送用户信息反馈
+        if(this.feedbackTextarea == "")return;
         var submitFeedbackData = {
           ResultIds: selectionData.join(","),
           feedbackContent: this.feedbackTextarea,

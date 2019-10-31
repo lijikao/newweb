@@ -1097,6 +1097,8 @@ button.signupbtn{
   color: #cccccc;
 }
 .screen-icon {
+  position: relative;
+  z-index: 2;
   display: inline-block;
   width: 24px;
   height: 24px;
@@ -1109,6 +1111,14 @@ button.signupbtn{
 .screen-icon.active {
   background: url(../assets/entry/screen-h.svg);
   background-size: cover;
+}
+.screen-box {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
 }
 .screen-menu {
   position: absolute;
