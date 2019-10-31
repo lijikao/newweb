@@ -67,7 +67,22 @@
       },
       "barchart2": {
         "title": "假货确信度统计"
-      }
+      },
+      "quotah3":"Sorry, the complaint balance is insufficient",
+      "quotap":"If you want to get more complaints, you can get more complaints through data feedback",
+      "normalh3":"Do you confirm the complaint?",
+      "normalp":"You have ",
+      "authorityh3":"Sorry，You don't have permission",
+      "authorityp":"If you need permission to file a complaint, you can contact simplybrand for permission to file a complaint",
+      "receivedh3":"Successfully !",
+      "receivedp":"We have received your feedback and suggestions successfully. You have received a quota for this feedback.",
+      "complaintsh3":"Successfully !",
+      "feedbackh4":"Feedback",
+      "feedbackp":"Data Feedback",
+      "feedbackpp":"You have not selected any data, so you can't select the question label at this time. Please select the data and try again.",
+      "feedbacktextarea":"System Feedback",
+      "feedbackbtn1":"Cancel",
+      "feedbackbtn2":"Sure"
     },
     "en": {
       "section_chart": "Summary",
@@ -137,6 +152,21 @@
       },
       "barchart2": {
         "title": "confidence level of fakes"
-      }
+      },
+      "quotah3":"Sorry, the complaint balance is insufficient",
+      "quotap":"If you want to get more complaints, you can get more complaints through data feedback",
+      "normalh3":"Do you confirm the complaint?",
+      "normalp":"You have ",
+      "authorityh3":"Sorry，You don't have permission",
+      "authorityp":"If you need permission to file a complaint, you can contact simplybrand for permission to file a complaint",
+      "receivedh3":"Successfully !",
+      "receivedp":"We have received your feedback and suggestions successfully. You have received a quota for this feedback.",
+      "complaintsh3":"Successfully !",
+      "feedbackh4":"Feedback",
+      "feedbackp":"Data Feedback",
+      "feedbackpp":"You have not selected any data, so you can't select the question label at this time. Please select the data and try again.",
+      "feedbacktextarea":"System Feedback",
+      "feedbackbtn1":"Cancel",
+      "feedbackbtn2":"Sure"
     }
   }
