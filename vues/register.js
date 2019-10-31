@@ -232,7 +232,7 @@
         var value = this.Verification[key].value;
         var status = "";
         if (key == "inputName") {
-          var rex = /[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/;
+          var rex = /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/;
           status = this.required(value)
             ? this.rangelength(value, [5, 20]) && rex.test(value)
               ? "success"
@@ -245,15 +245,16 @@
               : "false"
             : "default";
         } else if (key == "inputCompany") {
+          var rex =/^[\!\#\~\@]+$/;
           status = this.required(value)
-            ? this.rangelength(value, [0, 50])
+            ? this.rangelength(value, [0, 50]) && !rex.test(value)
               ? "success"
               : "false"
             : "default";
         } else if (key == "inputPassword") {
           this.Verification[key].tips = 0;
           status = this.required(value)
-            ? this.rangelength(value, [8, 16])
+            ? this.rangelength(value, [5, 20])
               ? "success"
               : "false"
             : "default";
@@ -321,16 +322,16 @@
         let level = 0;
         let strength1, strength2, strength3;
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [8, 16])
+        this.rangelength(this.Verification[key].value, [5, 25])
           ? ((strength1 = "success"), level++)
           : (strength1 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [8, 16]) &&
+        this.rangelength(this.Verification[key].value, [2, 25]) &&
         rex.test(this.Verification[key].value)
           ? ((strength2 = "success"), level++)
           : (strength2 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value,  [8, 16]) &&
+        this.rangelength(this.Verification[key].value,  [5, 25]) &&
         rex.test(this.Verification[key].value) &&
         rexx.test(this.Verification[key].value)
           ? ((strength3 = "success"), level++)
@@ -353,14 +354,14 @@
       },
       email: function(value) {
         if (value == null || this.trim(value) == "") return true;
-        return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,50}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,50}[a-zA-Z0-9])?)*$/.test(
+        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3,}))$/.test(
           value
         );
       },
       //字符串长度的范围
       rangelength: function(value, param) {
         if (value == null || this.trim(value) == "") return true;
-        return value.length >= param[0] && value.length <= param[1];
+        return value.replace(/[^\x00-\xff]/g, '01').length >= param[0] && value.length <= param[1];
       },
       //手机号码
       phone: function(value) {

@@ -1244,7 +1244,8 @@ var Helpers = (function (){
             <button type="button" value="15">{{locale.days15}}</button>
             <button type="button" value="30">{{locale.days30}}</button>
             <i class="screen-icon" @click="changeScreen"></i>
-            <div class="screen-menu" v-show="isSCreen">
+            <div class="screen-box" v-show="isSCreen">
+            <div class="screen-menu">
                 <h2>Brand</h2>
                 <div class="screen-menu-search-box">
                     <span></span>
@@ -1258,6 +1259,7 @@ var Helpers = (function (){
                 <div class="screen-btn">
                     <button type="" :class="{'btn-disabled':disableConfirmBtn}" @click="screenBtnClick">OK</button>
                 </div>
+            </div>
             </div>
             <div class="screen-slide" v-if="screenSLideData[0]">
                 <h2>Brand:</h2>
@@ -1735,28 +1737,28 @@ var Helpers = (function (){
                             }
                         },
                         buttons: [
-                            {
-                                id: 'export',
-                                icon: 'assets/icons/icon_export.png',
-                                classes: ['btn-red'],
-                                callback: function(tabid, filters, searchNeedle){
-                                    //we can use 'this' to refer to this vue-component object is because we do callback apply in method onTableviewToolsButtonClicked
-                                    let thisvue = this; 
-                                    let vwmodel = thisvue.viewModel;
-                                    let vwstate = thisvue.viewState;
+                            // {
+                            //     id: 'export',
+                            //     icon: 'assets/icons/icon_export.png',
+                            //     classes: ['btn-red'],
+                            //     callback: function(tabid, filters, searchNeedle){
+                            //         //we can use 'this' to refer to this vue-component object is because we do callback apply in method onTableviewToolsButtonClicked
+                            //         let thisvue = this; 
+                            //         let vwmodel = thisvue.viewModel;
+                            //         let vwstate = thisvue.viewState;
 
-                                    let start_date = moment(vwstate.start_date).format('YYYY-MM-DD 00:00:00');
-                                    let end_date = moment(vwstate.end_date).format('YYYY-MM-DD 23:59:59');
+                            //         let start_date = moment(vwstate.start_date).format('YYYY-MM-DD 00:00:00');
+                            //         let end_date = moment(vwstate.end_date).format('YYYY-MM-DD 23:59:59');
 
-                                    searchNeedle = (true === wna.IsNullOrUndefined(searchNeedle)) ? '' : searchNeedle;
-                                    filters = (true === wna.IsNullOrEmpty(filters)) ? null : filters;
+                            //         searchNeedle = (true === wna.IsNullOrUndefined(searchNeedle)) ? '' : searchNeedle;
+                            //         filters = (true === wna.IsNullOrEmpty(filters)) ? null : filters;
 
-                                    let conditions = { filters, searchNeedle, start_date, end_date };
+                            //         let conditions = { filters, searchNeedle, start_date, end_date };
 
-                                    thisvue.$emit('request-export', thisvue.path, conditions, thisvue);
-                                    console.log('------ > button(export): clicked!', conditions);
-                                }
-                            }
+                            //         thisvue.$emit('request-export', thisvue.path, conditions, thisvue);
+                            //         console.log('------ > button(export): clicked!', conditions);
+                            //     }
+                            // }
                         ]
                     },
                     trendChart:{
@@ -2268,7 +2270,7 @@ var Helpers = (function (){
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Cancel</button><button type="button" class="btn btn-primary" @click="feedbackCommit">Sure</button>
+                                    <button type="button" class="btn btn-primary" @click="$('#feedback').modal('hide');">Cancel</button><button type="button" class="btn btn-primary" @click="feedbackCommit">Sure</button>
                                 </div>
                             </div>
                         </div>
@@ -2590,6 +2592,9 @@ var Helpers = (function (){
                   "tab_failed"
                 ],
                 callback: function(selection) {
+                  if (true === wna.IsNullOrEmpty(selection)) {
+                    return;
+                  }
                   var selectionData = selection;
                   window.selectionData = selectionData;
                   if (true === wna.IsNullOrEmpty(selection)) {
@@ -3473,6 +3478,7 @@ var Helpers = (function (){
         // $('#complaints-no-authority').modal();
         // $("#feedback").modal("hide");
         //发送用户信息反馈
+        if(this.feedbackTextarea == "")return;
         var submitFeedbackData = {
           ResultIds: selectionData.join(","),
           feedbackContent: this.feedbackTextarea,
@@ -4452,7 +4458,7 @@ var Helpers = (function (){
         var value = this.Verification[key].value;
         var status = "";
         if (key == "inputName") {
-          var rex = /[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/;
+          var rex = /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/;
           status = this.required(value)
             ? this.rangelength(value, [5, 20]) && rex.test(value)
               ? "success"
@@ -4465,15 +4471,16 @@ var Helpers = (function (){
               : "false"
             : "default";
         } else if (key == "inputCompany") {
+          var rex =/^[\!\#\~\@]+$/;
           status = this.required(value)
-            ? this.rangelength(value, [0, 50])
+            ? this.rangelength(value, [0, 50]) && !rex.test(value)
               ? "success"
               : "false"
             : "default";
         } else if (key == "inputPassword") {
           this.Verification[key].tips = 0;
           status = this.required(value)
-            ? this.rangelength(value, [8, 16])
+            ? this.rangelength(value, [5, 20])
               ? "success"
               : "false"
             : "default";
@@ -4541,16 +4548,16 @@ var Helpers = (function (){
         let level = 0;
         let strength1, strength2, strength3;
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [8, 16])
+        this.rangelength(this.Verification[key].value, [5, 25])
           ? ((strength1 = "success"), level++)
           : (strength1 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [8, 16]) &&
+        this.rangelength(this.Verification[key].value, [2, 25]) &&
         rex.test(this.Verification[key].value)
           ? ((strength2 = "success"), level++)
           : (strength2 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value,  [8, 16]) &&
+        this.rangelength(this.Verification[key].value,  [5, 25]) &&
         rex.test(this.Verification[key].value) &&
         rexx.test(this.Verification[key].value)
           ? ((strength3 = "success"), level++)
@@ -4573,14 +4580,14 @@ var Helpers = (function (){
       },
       email: function(value) {
         if (value == null || this.trim(value) == "") return true;
-        return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,50}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,50}[a-zA-Z0-9])?)*$/.test(
+        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3,}))$/.test(
           value
         );
       },
       //字符串长度的范围
       rangelength: function(value, param) {
         if (value == null || this.trim(value) == "") return true;
-        return value.length >= param[0] && value.length <= param[1];
+        return value.replace(/[^\x00-\xff]/g, '01').length >= param[0] && value.length <= param[1];
       },
       //手机号码
       phone: function(value) {
@@ -4895,7 +4902,7 @@ var Helpers = (function (){
         } else if (key == "inputPassword") {
           this.Verification[key].tips = 0;
           status = this.required(value)
-            ? this.rangelength(value, [8, 16])
+            ? this.rangelength(value, [5, 25])
               ? "success"
               : "false"
             : "default";
@@ -4934,16 +4941,16 @@ var Helpers = (function (){
         let level = 0;
         let strength1, strength2, strength3;
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [8, 16])
+        this.rangelength(this.Verification[key].value, [5, 25])
           ? ((strength1 = "success"), level++)
           : (strength1 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [8, 16]) &&
+        this.rangelength(this.Verification[key].value, [5, 25]) &&
         rex.test(this.Verification[key].value)
           ? ((strength2 = "success"), level++)
           : (strength2 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [8, 16]) &&
+        this.rangelength(this.Verification[key].value, [5, 25]) &&
         rex.test(this.Verification[key].value) &&
         rexx.test(this.Verification[key].value)
           ? ((strength3 = "success"), level++)
@@ -4966,7 +4973,7 @@ var Helpers = (function (){
       },
       email: function(value) {
         if (value == null || this.trim(value) == "") return true;
-        return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,50}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,50}[a-zA-Z0-9])?)*$/.test(
+        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3,}))$/.test(
           value
         );
       },

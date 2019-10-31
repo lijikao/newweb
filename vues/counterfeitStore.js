@@ -137,28 +137,28 @@
                             }
                         },
                         buttons: [
-                            {
-                                id: 'export',
-                                icon: 'assets/icons/icon_export.png',
-                                classes: ['btn-red'],
-                                callback: function(tabid, filters, searchNeedle){
-                                    //we can use 'this' to refer to this vue-component object is because we do callback apply in method onTableviewToolsButtonClicked
-                                    let thisvue = this; 
-                                    let vwmodel = thisvue.viewModel;
-                                    let vwstate = thisvue.viewState;
+                            // {
+                            //     id: 'export',
+                            //     icon: 'assets/icons/icon_export.png',
+                            //     classes: ['btn-red'],
+                            //     callback: function(tabid, filters, searchNeedle){
+                            //         //we can use 'this' to refer to this vue-component object is because we do callback apply in method onTableviewToolsButtonClicked
+                            //         let thisvue = this; 
+                            //         let vwmodel = thisvue.viewModel;
+                            //         let vwstate = thisvue.viewState;
 
-                                    let start_date = moment(vwstate.start_date).format('YYYY-MM-DD 00:00:00');
-                                    let end_date = moment(vwstate.end_date).format('YYYY-MM-DD 23:59:59');
+                            //         let start_date = moment(vwstate.start_date).format('YYYY-MM-DD 00:00:00');
+                            //         let end_date = moment(vwstate.end_date).format('YYYY-MM-DD 23:59:59');
 
-                                    searchNeedle = (true === wna.IsNullOrUndefined(searchNeedle)) ? '' : searchNeedle;
-                                    filters = (true === wna.IsNullOrEmpty(filters)) ? null : filters;
+                            //         searchNeedle = (true === wna.IsNullOrUndefined(searchNeedle)) ? '' : searchNeedle;
+                            //         filters = (true === wna.IsNullOrEmpty(filters)) ? null : filters;
 
-                                    let conditions = { filters, searchNeedle, start_date, end_date };
+                            //         let conditions = { filters, searchNeedle, start_date, end_date };
 
-                                    thisvue.$emit('request-export', thisvue.path, conditions, thisvue);
-                                    console.log('------ > button(export): clicked!', conditions);
-                                }
-                            }
+                            //         thisvue.$emit('request-export', thisvue.path, conditions, thisvue);
+                            //         console.log('------ > button(export): clicked!', conditions);
+                            //     }
+                            // }
                         ]
                     },
                     trendChart:{
