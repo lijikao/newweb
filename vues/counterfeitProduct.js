@@ -603,7 +603,6 @@
       },
     },
     destroyed: function() {
-      alert("unmounted")
     },
     mounted() {
       

@@ -291,6 +291,10 @@
   float: none;
   border: none;
 }
+.screen-menu .screen-btn button.btn-disabled {
+  background-color: #818181;
+  pointer-events: none;
+}
 .datetimeselector {
   height: auto;
   overflow: hidden;
