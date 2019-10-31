@@ -321,10 +321,10 @@
               {
                 fieldid: "ProductDescription",
                 transform: function(value, entry) {
-                  if (true !== wna.IsNullOrEmpty(entry.ProductURL)) {
+                  if (true !== wna.IsNullOrEmpty(entry.ShopURL)) {
                     return (
                       '<a href="' +
-                      entry.ProductURL +
+                      entry.ShopURL +
                       '" target="_blank">' +
                       value +
                       "</a>"
@@ -598,6 +598,9 @@
           this.dashboardModel.barChart1.series[1].name = this.locale.valuesMapping.DiscriminantResult[0];
         }
       },
+    },
+    destroyed: function() {
+      alert("unmounted")
     },
     mounted() {
       

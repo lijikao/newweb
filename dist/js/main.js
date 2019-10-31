@@ -1256,7 +1256,7 @@ var Helpers = (function (){
                     </ul>
                 </div>
                 <div class="screen-btn">
-                    <button type="" @click="screenBtnClick">OK</button>
+                    <button type="" :class="{'btn-disabled':disableConfirmBtn}" @click="screenBtnClick">OK</button>
                 </div>
             </div>
             <div class="screen-slide" v-if="screenSLideData[0]">
@@ -1281,28 +1281,31 @@ var Helpers = (function (){
         screenSLideData: ['ALL'],
         // filterTagData: [], // store all selected tag data
         isAllTag: false,
+        disableConfirmBtn: false,
       };
     },
     computed: {
       displayedScreenSlide(){
         return this.isAllTag ? ['ALL'] : this.screenSLideData;
       },
+      allowOKBtn() {
+        
+      }
     },
     watch: {
-      // screenData: {
-      //   handler(oldVal, newVal) {
-      //     console.log('changed watch')
-      //     // newVal.forEach(ele => {
-      //     //   //取消 all 勾选
-      //     //   if(ele.flag === false && ele.name !== "ALL") {
-      //     //     this.uncheckTheAllTag();
-      //     //   } else {
-      //     //     this.checkTheAllTag();
-      //     //   }
-      //     // });
-      //   },
-      //   deep: true,
-      // }
+      screenData: {
+        handler(oldVal, newVal) {
+          // 当 无标签时 禁止ok 提交表单
+          let checkedBtns = this.screenData.filter((val) => {
+            return val.flag
+          });
+          this.disableConfirmBtn = checkedBtns.length < 1? true : false;
+        },
+        deep: true,
+      }
+    },
+    destroyed: function() {
+      alert("unmounted model")
     },
     mounted: function() {
         window.brandData='';
@@ -1343,7 +1346,7 @@ var Helpers = (function (){
       })(this, $(this.$refs.daterangepicker));
       var that = this;
       // the all tag select event
-      $(document).on("click", ".screen-list span:first", function() {
+      $(".screen-list").on("click","span:first",function() {
         if ($(this).hasClass("active")) {
           $(this).removeClass("active");
           that.screenData[$(this).attr("data")].flag = false;
@@ -1357,13 +1360,15 @@ var Helpers = (function (){
         that.checkAllTags();
       });
       // tag select event
-      $(document).on("click", ".screen-list span:gt(0)", function() {
+      $(".screen-list").on("click"," span:gt(0)",function() {
         // unchecking
         if ($(this).hasClass("active")) {
           that.uncheckCertainTag($(this));
           that.filterCheckChange()
+          console.log('uncheck condition')
           return;
         }
+        console.log('check condition')
         // checking
         that.checkCertainTag($(this));
         that.filterCheckChange();
@@ -1482,6 +1487,8 @@ var Helpers = (function (){
       checkCertainTag: function (jqEle) {
         $(jqEle).addClass("active");
         this.screenData[$(jqEle).attr("data")].flag = true;
+        console.log($(jqEle))
+
       }, 
       saveDateRange: function(start, end) {
         let thisvue = this;
@@ -2452,10 +2459,10 @@ var Helpers = (function (){
               {
                 fieldid: "ProductDescription",
                 transform: function(value, entry) {
-                  if (true !== wna.IsNullOrEmpty(entry.ProductURL)) {
+                  if (true !== wna.IsNullOrEmpty(entry.ShopURL)) {
                     return (
                       '<a href="' +
-                      entry.ProductURL +
+                      entry.ShopURL +
                       '" target="_blank">' +
                       value +
                       "</a>"
@@ -2729,6 +2736,9 @@ var Helpers = (function (){
           this.dashboardModel.barChart1.series[1].name = this.locale.valuesMapping.DiscriminantResult[0];
         }
       },
+    },
+    destroyed: function() {
+      alert("unmounted")
     },
     mounted() {
       
