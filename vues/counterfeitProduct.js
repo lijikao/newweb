@@ -602,9 +602,6 @@
         }
       },
     },
-    destroyed: function() {
-      alert("unmounted")
-    },
     mounted() {
       
       $("#complaints-insufficient-quota").appendTo("body");
@@ -1389,6 +1386,7 @@
           success: function(rex) {
             $('#complaints-success').modal();
              //重新调取接口数据
+             that.requestTabAndDropdownData();
              that.tableviewModelChange({});
           },
           error: function(response) {

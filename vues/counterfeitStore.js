@@ -308,8 +308,6 @@
                     brand: window.brandData,
                 }
                 Object.assign(requestQuery,query); // mutate
-                console.log("!!!impor")
-                console.log(requestQuery)
                 $.ajax({
                     url:  `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/abnormal_shop_report`,
                     type: "GET",
@@ -345,6 +343,7 @@
                         data: [moment(val.FakeShopStatusByChannel_DiscriminantTime).toDate(),val.FakeShopStatusByChannel_ShopCount]
                     }
                 });
+                // debugger;
                 let organizedData = halfOrganizedData.reduce((acc,val) => {
                     
                     if(!_.find(acc,(o) => o.name == val.name)) {
@@ -352,9 +351,9 @@
                             color: colorPallet[acc.length%5],
                             name: val.name,
                             data: [val.data],                                
-                        })       
+                        }) 
                     }else{
-                        let bucket = _.find(acc, (o) => o.name = val.name);
+                        let bucket = _.find(acc, (o) => o.name == val.name);
                         bucket.data.push(val.data);
                     }
                     return acc;

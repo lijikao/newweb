@@ -247,16 +247,19 @@
             formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
         legend: {
+            type:'scroll',
+            icon:'rect',
             show: true,
             orient: 'vertical',
             //data: ['A', 'B', 'C', 'D', 'E'],      //!!! should be populated from model
             formatter: '{name}',
-            itemWidth: 10,
-            itemHeight: 10,
+            itemWidth: 16,
+            itemHeight: 14,
             verticalAlign: 'middle',
             align: 'left',
             x : '50%',
-            y : '25%',
+            y : '10%',
+            pageIconSize:10,
         },
         series: [
             {
@@ -1306,15 +1309,13 @@ var Helpers = (function (){
         deep: true,
       }
     },
-    destroyed: function() {
-      alert("unmounted model")
-    },
     mounted: function() {
         window.brandData='';
         var that = this;
       (function(thisvue, $picker) {
         $picker
           .daterangepicker({
+            maxDate: new Date(),
             locale: {
               format: "DD/MM/YYYY"
             }
@@ -1489,8 +1490,6 @@ var Helpers = (function (){
       checkCertainTag: function (jqEle) {
         $(jqEle).addClass("active");
         this.screenData[$(jqEle).attr("data")].flag = true;
-        console.log($(jqEle))
-
       }, 
       saveDateRange: function(start, end) {
         let thisvue = this;
@@ -1908,8 +1907,6 @@ var Helpers = (function (){
                     brand: window.brandData,
                 }
                 Object.assign(requestQuery,query); // mutate
-                console.log("!!!impor")
-                console.log(requestQuery)
                 $.ajax({
                     url:  `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/abnormal_shop_report`,
                     type: "GET",
@@ -1945,6 +1942,7 @@ var Helpers = (function (){
                         data: [moment(val.FakeShopStatusByChannel_DiscriminantTime).toDate(),val.FakeShopStatusByChannel_ShopCount]
                     }
                 });
+                // debugger;
                 let organizedData = halfOrganizedData.reduce((acc,val) => {
                     
                     if(!_.find(acc,(o) => o.name == val.name)) {
@@ -1952,9 +1950,9 @@ var Helpers = (function (){
                             color: colorPallet[acc.length%5],
                             name: val.name,
                             data: [val.data],                                
-                        })       
+                        }) 
                     }else{
-                        let bucket = _.find(acc, (o) => o.name = val.name);
+                        let bucket = _.find(acc, (o) => o.name == val.name);
                         bucket.data.push(val.data);
                     }
                     return acc;
@@ -2742,9 +2740,6 @@ var Helpers = (function (){
         }
       },
     },
-    destroyed: function() {
-      alert("unmounted")
-    },
     mounted() {
       
       $("#complaints-insufficient-quota").appendTo("body");
@@ -3529,6 +3524,7 @@ var Helpers = (function (){
           success: function(rex) {
             $('#complaints-success').modal();
              //重新调取接口数据
+             that.requestTabAndDropdownData();
              that.tableviewModelChange({});
           },
           error: function(response) {

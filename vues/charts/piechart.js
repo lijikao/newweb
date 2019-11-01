@@ -5,16 +5,19 @@
             formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
         legend: {
+            type:'scroll',
+            icon:'rect',
             show: true,
             orient: 'vertical',
             //data: ['A', 'B', 'C', 'D', 'E'],      //!!! should be populated from model
             formatter: '{name}',
-            itemWidth: 10,
-            itemHeight: 10,
+            itemWidth: 16,
+            itemHeight: 14,
             verticalAlign: 'middle',
             align: 'left',
             x : '50%',
-            y : '25%',
+            y : '10%',
+            pageIconSize:10,
         },
         series: [
             {

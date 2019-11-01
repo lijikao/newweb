@@ -70,15 +70,13 @@
         deep: true,
       }
     },
-    destroyed: function() {
-      alert("unmounted model")
-    },
     mounted: function() {
         window.brandData='';
         var that = this;
       (function(thisvue, $picker) {
         $picker
           .daterangepicker({
+            maxDate: new Date(),
             locale: {
               format: "DD/MM/YYYY"
             }
@@ -253,8 +251,6 @@
       checkCertainTag: function (jqEle) {
         $(jqEle).addClass("active");
         this.screenData[$(jqEle).attr("data")].flag = true;
-        console.log($(jqEle))
-
       }, 
       saveDateRange: function(start, end) {
         let thisvue = this;
