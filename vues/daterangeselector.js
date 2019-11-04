@@ -137,7 +137,9 @@
         that.checkCertainTag($(this));
         that.filterCheckChange();
       });
-      $(document).on("click", ".screen-slide .screen-closed", function() {
+      $('.screen-slide').on("click", ".screen-closed", function() {
+        //去除只有ALL的情况
+        if(that.screenSLideData[0] == "ALL" && that.screenSLideData[1] ==  undefined )return;
         that.screenSLideData.splice(
           $.inArray(
             $(this)
@@ -184,21 +186,10 @@
         },
         success: function(rex) {
           // init new coming tags with 'false' flag
-          let results = rex.results.map(function(val) {
-            return {
-              ...val,
-              flag:false,
-            }
-          });
-          that.screenData= that.screenData.concat(results);
-          // init filter menu with all checked
-          that.$nextTick(function () {
-            that.isAllTag = true;
-            that.checkTheAllTag();
-            that.checkAllTags();
-          });
         },
-        error: function(response) {}
+        error: function(response) {
+          return;
+        }
       });
       
     },

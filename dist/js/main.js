@@ -1376,7 +1376,9 @@ var Helpers = (function (){
         that.checkCertainTag($(this));
         that.filterCheckChange();
       });
-      $(document).on("click", ".screen-slide .screen-closed", function() {
+      $('.screen-slide').on("click", ".screen-closed", function() {
+        //去除只有ALL的情况
+        if(that.screenSLideData[0] == "ALL" && that.screenSLideData[1] ==  undefined )return;
         that.screenSLideData.splice(
           $.inArray(
             $(this)
@@ -1423,21 +1425,10 @@ var Helpers = (function (){
         },
         success: function(rex) {
           // init new coming tags with 'false' flag
-          let results = rex.results.map(function(val) {
-            return {
-              ...val,
-              flag:false,
-            }
-          });
-          that.screenData= that.screenData.concat(results);
-          // init filter menu with all checked
-          that.$nextTick(function () {
-            that.isAllTag = true;
-            that.checkTheAllTag();
-            that.checkAllTags();
-          });
         },
-        error: function(response) {}
+        error: function(response) {
+          return;
+        }
       });
       
     },
@@ -2590,9 +2581,9 @@ var Helpers = (function (){
                   "tab_failed"
                 ],
                 callback: function(selection) {
-                  if (true === wna.IsNullOrEmpty(selection)) {
-                    return;
-                  }
+                  // if (true === wna.IsNullOrEmpty(selection)) {
+                  //   return;
+                  // }
                   var selectionData = selection;
                   window.selectionData = selectionData;
                   if (true === wna.IsNullOrEmpty(selection)) {
@@ -2617,16 +2608,37 @@ var Helpers = (function (){
                     return;
                   }
                    //鉴权
-                  if(JSON.parse(localStorage.getItem("balance")).val>0){
-                    this.balance = JSON.parse(localStorage.getItem("balance")).val;
-                    $("#complaints-normal-quota").modal();
-                  }else if(JSON.parse(localStorage.getItem("balance")).val==0){
-                    $("#complaints-insufficient-quota").modal();
-                    return;
-                  }else {
-                    $("#complaints-insufficient-quota").modal();
-                    return;
-                  }
+                   //获取balance
+                   var that = this;
+                   var balances = null;
+                   let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/users/quota/`;
+                   $.ajax({
+                     url: reportUrl,
+                     type: "GET",
+                     changeOrigin: true,
+                     headers: {
+                       Authorization:
+                         "Bearer " + JSON.parse(localStorage.getItem("token")).val + ""
+                     },
+                     success: function(rex) {
+                      balances = rex.balance;
+                      console.log(balances)
+                      if(balances>0){
+                        that.balance = balances;
+                        $("#complaints-normal-quota").modal();
+                      }else if(balances==0){
+                        $("#complaints-insufficient-quota").modal();
+                        return;
+                      }else {
+                        $("#complaints-insufficient-quota").modal();
+                        return;
+                      }
+                     },
+                     error: function(response) {
+                       return;
+                     }
+                   });
+                  
                   var selectionData = selection;
                   window.selectionData = selectionData;
                   let thisvue = this;
@@ -3473,7 +3485,7 @@ var Helpers = (function (){
         // $('#complaints-no-authority').modal();
         // $("#feedback").modal("hide");
         //发送用户信息反馈
-        if(this.feedbackTextarea == "")return;
+        if(this.feedbackTextarea == ""&&this.feedbackBtnId== 0)return;
         var submitFeedbackData = {
           ResultIds: selectionData.join(","),
           feedbackContent: this.feedbackTextarea,
@@ -3498,7 +3510,9 @@ var Helpers = (function (){
             //重新调取接口数据
             that.tableviewModelChange({});
           },
-          error: function(response) {}
+          error: function(response) {
+
+          }
         });
       },
       normalQuota: function() {
@@ -4476,7 +4490,7 @@ var Helpers = (function (){
         } else if (key == "inputPassword") {
           this.Verification[key].tips = 0;
           status = this.required(value)
-            ? this.rangelength(value, [5, 20])
+            ? this.rangelength(value, [5, 25])&&(this.Verification.inputPassword.strength.level=="center"||this.Verification.inputPassword.strength.level=="height")
               ? "success"
               : "false"
             : "default";
@@ -4544,16 +4558,16 @@ var Helpers = (function (){
         let level = 0;
         let strength1, strength2, strength3;
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [5, 25])
+        this.rangelength(this.Verification[key].value, [5, 20])
           ? ((strength1 = "success"), level++)
           : (strength1 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [2, 25]) &&
+        this.rangelength(this.Verification[key].value, [2, 20]) &&
         rex.test(this.Verification[key].value)
           ? ((strength2 = "success"), level++)
           : (strength2 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value,  [5, 25]) &&
+        this.rangelength(this.Verification[key].value,  [5, 20]) &&
         rex.test(this.Verification[key].value) &&
         rexx.test(this.Verification[key].value)
           ? ((strength3 = "success"), level++)
@@ -4583,7 +4597,7 @@ var Helpers = (function (){
       //字符串长度的范围
       rangelength: function(value, param) {
         if (value == null || this.trim(value) == "") return true;
-        return value.replace(/[^\x00-\xff]/g, '01').length >= param[0] && value.length <= param[1];
+        return value.replace(/[^\x00-\xff]/g, '01').length >= param[0] && value.replace(/[^\x00-\xff]/g, '01').length <= param[1];
       },
       //手机号码
       phone: function(value) {

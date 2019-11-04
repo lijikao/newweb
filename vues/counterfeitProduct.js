@@ -452,9 +452,9 @@
                   "tab_failed"
                 ],
                 callback: function(selection) {
-                  if (true === wna.IsNullOrEmpty(selection)) {
-                    return;
-                  }
+                  // if (true === wna.IsNullOrEmpty(selection)) {
+                  //   return;
+                  // }
                   var selectionData = selection;
                   window.selectionData = selectionData;
                   if (true === wna.IsNullOrEmpty(selection)) {
@@ -479,16 +479,37 @@
                     return;
                   }
                    //鉴权
-                  if(JSON.parse(localStorage.getItem("balance")).val>0){
-                    this.balance = JSON.parse(localStorage.getItem("balance")).val;
-                    $("#complaints-normal-quota").modal();
-                  }else if(JSON.parse(localStorage.getItem("balance")).val==0){
-                    $("#complaints-insufficient-quota").modal();
-                    return;
-                  }else {
-                    $("#complaints-insufficient-quota").modal();
-                    return;
-                  }
+                   //获取balance
+                   var that = this;
+                   var balances = null;
+                   let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/users/quota/`;
+                   $.ajax({
+                     url: reportUrl,
+                     type: "GET",
+                     changeOrigin: true,
+                     headers: {
+                       Authorization:
+                         "Bearer " + JSON.parse(localStorage.getItem("token")).val + ""
+                     },
+                     success: function(rex) {
+                      balances = rex.balance;
+                      console.log(balances)
+                      if(balances>0){
+                        that.balance = balances;
+                        $("#complaints-normal-quota").modal();
+                      }else if(balances==0){
+                        $("#complaints-insufficient-quota").modal();
+                        return;
+                      }else {
+                        $("#complaints-insufficient-quota").modal();
+                        return;
+                      }
+                     },
+                     error: function(response) {
+                       return;
+                     }
+                   });
+                  
                   var selectionData = selection;
                   window.selectionData = selectionData;
                   let thisvue = this;
@@ -1335,7 +1356,7 @@
         // $('#complaints-no-authority').modal();
         // $("#feedback").modal("hide");
         //发送用户信息反馈
-        if(this.feedbackTextarea == "")return;
+        if(this.feedbackTextarea == ""&&this.feedbackBtnId== 0)return;
         var submitFeedbackData = {
           ResultIds: selectionData.join(","),
           feedbackContent: this.feedbackTextarea,
@@ -1360,7 +1381,9 @@
             //重新调取接口数据
             that.tableviewModelChange({});
           },
-          error: function(response) {}
+          error: function(response) {
+
+          }
         });
       },
       normalQuota: function() {

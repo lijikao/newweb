@@ -254,7 +254,7 @@
         } else if (key == "inputPassword") {
           this.Verification[key].tips = 0;
           status = this.required(value)
-            ? this.rangelength(value, [5, 20])
+            ? this.rangelength(value, [5, 25])&&(this.Verification.inputPassword.strength.level=="center"||this.Verification.inputPassword.strength.level=="height")
               ? "success"
               : "false"
             : "default";
@@ -322,16 +322,16 @@
         let level = 0;
         let strength1, strength2, strength3;
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [5, 25])
+        this.rangelength(this.Verification[key].value, [5, 20])
           ? ((strength1 = "success"), level++)
           : (strength1 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value, [2, 25]) &&
+        this.rangelength(this.Verification[key].value, [2, 20]) &&
         rex.test(this.Verification[key].value)
           ? ((strength2 = "success"), level++)
           : (strength2 = "false");
         this.required(this.Verification[key].value) &&
-        this.rangelength(this.Verification[key].value,  [5, 25]) &&
+        this.rangelength(this.Verification[key].value,  [5, 20]) &&
         rex.test(this.Verification[key].value) &&
         rexx.test(this.Verification[key].value)
           ? ((strength3 = "success"), level++)
@@ -361,7 +361,7 @@
       //字符串长度的范围
       rangelength: function(value, param) {
         if (value == null || this.trim(value) == "") return true;
-        return value.replace(/[^\x00-\xff]/g, '01').length >= param[0] && value.length <= param[1];
+        return value.replace(/[^\x00-\xff]/g, '01').length >= param[0] && value.replace(/[^\x00-\xff]/g, '01').length <= param[1];
       },
       //手机号码
       phone: function(value) {
