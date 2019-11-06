@@ -475,6 +475,7 @@
                 classes: ["btn-white"], //or null
                 visibleInTabs: ["tab_pending"],
                 callback: function(selection) {
+                  console.log(selection,'12345')
                   if (true === wna.IsNullOrEmpty(selection)) {
                     return;
                   }
@@ -816,6 +817,7 @@
           end_date: this.viewState.end_date,
           brand: window.brandData,
         }
+        window.requestQuery = requestQuery;
         Object.assign(requestQuery,query); // mutate
         console.log("!!!impor")
         console.log(requestQuery)

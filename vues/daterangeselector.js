@@ -137,9 +137,7 @@
         that.checkCertainTag($(this));
         that.filterCheckChange();
       });
-      $('.screen-slide').on("click", ".screen-closed", function() {
-        //去除只有ALL的情况
-        if(that.screenSLideData[0] == "ALL" && that.screenSLideData[1] ==  undefined )return;
+      $(document).on("click", ".screen-slide .screen-closed", function() {
         that.screenSLideData.splice(
           $.inArray(
             $(this)
@@ -173,12 +171,16 @@
               that.saveDateRange(window.startTimes,window.endTimes);
         }
       });
-      var that =this;
       //获取列表
-      let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/query/metric/commodity_test_report?key=top_brand&start_date=2019-04-01 00:00:00&end_date=2019-08-01 00:00:00`;
+      let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/query/metric/commodity_test_report`;
       $.ajax({
         url: reportUrl,
         type: "GET",
+        data:{
+          key: "top_brand",
+          start_date:window.requestQuery.start_date,
+          end_date:window.requestQuery.end_date,
+        },
         changeOrigin: true,
         headers: {
           Authorization:
@@ -186,10 +188,21 @@
         },
         success: function(rex) {
           // init new coming tags with 'false' flag
+          let results = rex.results.map(function(val) {
+            return {
+              ...val,
+              flag:false,
+            }
+          });
+          that.screenData= that.screenData.concat(results);
+          // init filter menu with all checked
+          that.$nextTick(function () {
+            that.isAllTag = true;
+            that.checkTheAllTag();
+            that.checkAllTags();
+          });
         },
-        error: function(response) {
-          return;
-        }
+        error: function(response) {}
       });
       
     },
