@@ -654,6 +654,7 @@
     methods: {
       // tableview model change event 
       tableviewModelChange: function (query, opt) {
+        // debugger
         /*
          query: {
            keyToChange: value
