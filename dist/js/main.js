@@ -1433,6 +1433,7 @@ var Helpers = (function (){
               flag:false,
             }
           });
+          that.screenData=[{ id: 'all', name: "ALL" ,flag:false}];
           that.screenData= that.screenData.concat(results);
           // init filter menu with all checked
           that.$nextTick(function () {
@@ -1443,7 +1444,41 @@ var Helpers = (function (){
         },
         error: function(response) {}
       });
-      
+      $('.screen-icon').on("click",function(){
+        let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/query/metric/commodity_test_report`;
+      $.ajax({
+        url: reportUrl,
+        type: "GET",
+        data:{
+          key: "top_brand",
+          start_date:window.requestQuery.start_date,
+          end_date:window.requestQuery.end_date,
+        },
+        changeOrigin: true,
+        headers: {
+          Authorization:
+            "Bearer " + JSON.parse(localStorage.getItem("token")).val + ""
+        },
+        success: function(rex) {
+          // init new coming tags with 'false' flag
+          let results = rex.results.map(function(val) {
+            return {
+              ...val,
+              flag:false,
+            }
+          });
+          that.screenData=[{ id: 'all', name: "ALL" ,flag:false}];
+          that.screenData= that.screenData.concat(results);
+          // init filter menu with all checked
+          that.$nextTick(function () {
+            that.isAllTag = true;
+            that.checkTheAllTag();
+            that.checkAllTags();
+          });
+        },
+        error: function(response) {}
+      });
+      })
     },
     methods: {
       filterCheckChange() {
@@ -2796,6 +2831,7 @@ var Helpers = (function (){
     methods: {
       // tableview model change event 
       tableviewModelChange: function (query, opt) {
+        // debugger
         /*
          query: {
            keyToChange: value
