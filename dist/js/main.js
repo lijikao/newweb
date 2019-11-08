@@ -657,8 +657,9 @@ var Helpers = (function (){
                 <tbody id="" v-if="(true !== wna.IsNullOrEmpty(model))">
                     <tr v-for="(r, i) in sortedModel">
                     <!-- //-->
-                        <td v-if="true === viewModel.multiselect"><input type="checkbox"  
-                         :ref="rowId(i)" :id="rowId(i)" :value="r[viewModel.primaryKey]" v-bind:disabled="r['Feedback']==1" v-model="viewState.selectedRows" ><label :for="rowId(i)">&nbsp;</label></td>
+                        <td v-if="true === viewModel.multiselect">
+                          <input type="checkbox"  :ref="rowId(i)" :id="rowId(i)" :value="r[viewModel.primaryKey]" v-bind:disabled="r['Feedback']==1" v-model="viewState.selectedRows" ><label :for="rowId(i)">&nbsp;</label>
+                        </td>
                         <td v-for="c in viewModel.cols" v-if="(true === viewModel.shouldActivateCols(c))" v-html="(true === wna.IsFunction(c.transform)) ? (c.transform(r[c.fieldid], r)) : (r[c.fieldid])"></td>
                     </tr>
                 </tbody>
@@ -702,6 +703,13 @@ var Helpers = (function (){
           let vwmodel = thisvue.viewModel;
           let data = thisvue.model;
             console.log(111,data,000)
+            console.log("-------------slected rows ")
+            console.log(this.viewState.selectedRows)
+          // refresh selected row data
+          if(data.refreshSelectedRow) {
+            this.viewState.selectedRows = [];
+            data.refreshSelectedRow = false;
+          }
           if (true !== wna.IsNullOrUndefined(vwmodel.rowsPerPage)) {
             if (true === wna.IsNullOrEmpty(data)) {
               thisvue.viewState.totalPages = 0;
@@ -1179,6 +1187,7 @@ var Helpers = (function (){
         methods: {
             onSelectTab: function(filter,tabid){
                 this.viewState.selectedTab = tabid;
+                this.model.refreshSelectedRow = true;
                 this.$emit('tableviewModelChange', {
                     rp_status: filter? filter.RightsProtectionStatus: 0,
                     page: 1,
@@ -1433,6 +1442,7 @@ var Helpers = (function (){
               flag:false,
             }
           });
+          that.screenData=[{ id: 'all', name: "ALL" ,flag:false}];
           that.screenData= that.screenData.concat(results);
           // init filter menu with all checked
           that.$nextTick(function () {
@@ -1443,7 +1453,41 @@ var Helpers = (function (){
         },
         error: function(response) {}
       });
-      
+      $('.screen-icon').on("click",function(){
+        let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/query/metric/commodity_test_report`;
+      $.ajax({
+        url: reportUrl,
+        type: "GET",
+        data:{
+          key: "top_brand",
+          start_date:window.requestQuery.start_date,
+          end_date:window.requestQuery.end_date,
+        },
+        changeOrigin: true,
+        headers: {
+          Authorization:
+            "Bearer " + JSON.parse(localStorage.getItem("token")).val + ""
+        },
+        success: function(rex) {
+          // init new coming tags with 'false' flag
+          let results = rex.results.map(function(val) {
+            return {
+              ...val,
+              flag:false,
+            }
+          });
+          that.screenData=[{ id: 'all', name: "ALL" ,flag:false}];
+          that.screenData= that.screenData.concat(results);
+          // init filter menu with all checked
+          that.$nextTick(function () {
+            that.isAllTag = true;
+            that.checkTheAllTag();
+            that.checkAllTags();
+          });
+        },
+        error: function(response) {}
+      });
+      })
     },
     methods: {
       filterCheckChange() {
@@ -2364,6 +2408,7 @@ var Helpers = (function (){
             multiselect: true,
             tableLoading: true,
             primaryKey: "ResultId",
+            refreshSelectedRow: false,
             tabs: [
               {
                 id: "tab_all",
@@ -2796,6 +2841,7 @@ var Helpers = (function (){
     methods: {
       // tableview model change event 
       tableviewModelChange: function (query, opt) {
+        // debugger
         /*
          query: {
            keyToChange: value
