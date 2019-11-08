@@ -222,6 +222,7 @@
             multiselect: true,
             tableLoading: true,
             primaryKey: "ResultId",
+            refreshSelectedRow: false,
             tabs: [
               {
                 id: "tab_all",

@@ -76,6 +76,7 @@
         methods: {
             onSelectTab: function(filter,tabid){
                 this.viewState.selectedTab = tabid;
+                this.model.refreshSelectedRow = true;
                 this.$emit('tableviewModelChange', {
                     rp_status: filter? filter.RightsProtectionStatus: 0,
                     page: 1,
