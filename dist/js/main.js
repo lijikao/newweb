@@ -1385,7 +1385,9 @@ var Helpers = (function (){
         that.checkCertainTag($(this));
         that.filterCheckChange();
       });
-      $(document).on("click", ".screen-slide .screen-closed", function() {
+      $('.screen-slide').on("click", ".screen-closed", function() {
+        //去除只有ALL的情况
+        if(that.screenSLideData[0] == "ALL" && that.screenSLideData[1] ==  undefined )return;
         that.screenSLideData.splice(
           $.inArray(
             $(this)
