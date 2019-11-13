@@ -138,8 +138,8 @@
         that.filterCheckChange();
       });
       $('.screen-slide').on("click", ".screen-closed", function() {
-        //去除只有ALL的情况
-        if(that.screenSLideData[0] == "ALL" && that.screenSLideData[1] ==  undefined )return;
+      //去除只有ALL的情况
+      if(that.screenSLideData[1] ==  undefined || (that.screenSLideData[0]=='ALL'&&that.screenSLideData[1] !==  undefined))return;
         that.screenSLideData.splice(
           $.inArray(
             $(this)
@@ -156,7 +156,7 @@
           that.uncheckAllTags();
         }
         for (var i = that.screenData.length - 1; i >= 0; i--) {
-          if (that.screenData[i].name.indexOf($(_that).siblings().text())>=0){$(".screen-list span").eq(i).removeClass("active");}
+          if (that.screenData[i].name.indexOf($(_that).siblings().text())>=0){$(".screen-list span").eq(i).removeClass("active"); that.screenData[i].flag = false;}
         }
         //发起数据请求
         var str = "";
@@ -167,10 +167,10 @@
         brandData = str.slice(0,str.length-1);
         if(brandData.indexOf("all")==0){
             window.brandData = '';
-            that.saveDateRange(window.startTimes,window.endTimes);
+            $(that.$el).fire("change", {  });
           }else {
               window.brandData = brandData;
-              that.saveDateRange(window.startTimes,window.endTimes);
+              $(that.$el).fire("change", {  });
         }
       });
       //获取列表
@@ -207,41 +207,6 @@
         },
         error: function(response) {}
       });
-      $('.screen-icon').on("click",function(){
-        let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/query/metric/commodity_test_report`;
-      $.ajax({
-        url: reportUrl,
-        type: "GET",
-        data:{
-          key: "top_brand",
-          start_date:window.requestQuery.start_date,
-          end_date:window.requestQuery.end_date,
-        },
-        changeOrigin: true,
-        headers: {
-          Authorization:
-            "Bearer " + JSON.parse(localStorage.getItem("token")).val + ""
-        },
-        success: function(rex) {
-          // init new coming tags with 'false' flag
-          let results = rex.results.map(function(val) {
-            return {
-              ...val,
-              flag:false,
-            }
-          });
-          that.screenData=[{ id: 'all', name: "ALL" ,flag:false}];
-          that.screenData= that.screenData.concat(results);
-          // init filter menu with all checked
-          that.$nextTick(function () {
-            that.isAllTag = true;
-            that.checkTheAllTag();
-            that.checkAllTags();
-          });
-        },
-        error: function(response) {}
-      });
-      })
     },
     methods: {
       filterCheckChange() {
