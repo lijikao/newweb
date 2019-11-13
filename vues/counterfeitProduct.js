@@ -701,6 +701,7 @@
             end_date: this.tableviewQuery.end_date,
             brand: this.tableviewQuery.brand,
             userid: this.tableviewQuery.userid,
+            rp_status: this.tableviewQuery.rp_status,
             ...query,
             
           };
@@ -731,6 +732,8 @@
             };
             that.tableviewModel.data = data;
             that.shutTableLoader();
+            // 更新条目等数据
+            // that.requestTabAndDropdownData()
           },
           error: function(response) {
             alert("表格数据加载失败");
@@ -762,12 +765,16 @@
           changeOrigin: true,
           crossDomain: true,
           success: function(rex) {
+            // tab_all 是所有返回值的和，rp0是真货+所有tab就是总和。***如有问题请询问：这个在测试服务器是对的，但是开发服务器多于底下的总和显示。
+            let sumNumberOfAllTabs = rex.results[0].reduce((acc,val) => {
+              return acc+val['count(0)'];
+            },0);
             rex.results[0].forEach(function(val) {
               let correspondingTab = _.find(that.viewModel.tableview.tabs, function(o) {
                   return o.filter.RightsProtectionStatus === val.RightsProtectionStatus;
                 }
               );
-              correspondingTab.sum = val['count(0)'];
+              correspondingTab.sum = correspondingTab.id !='tab_all'? val['count(0)']:sumNumberOfAllTabs;
             })
             //chanel
             that.viewModel.tableview.filters[0].options = rex.results[1].map(function(val) {
@@ -1199,14 +1206,14 @@
          //orgnize metadata
         let series = metaData.reduce((acc,val) => {
           let dupIndex = acc.channels.indexOf(val.FakeProductStatusByChannel_ChanelName)
+          let realOrFake = val.FakeProductStatusByChannel_DiscriminantResult;
           // 根据channel 合并去重，同时重组
           if( dupIndex < 0){
             acc.channels.push(val.FakeProductStatusByChannel_ChanelName)
-            acc.fakeCounts.push(val.FakeProductStatusByChannel_DiscriminantResult)
-            acc.realCounts.push(val.FakeProductStatusByChannel_ProductCount)
+            acc[realOrFake==0 ?'fakeCounts':'realCounts'].push(val.FakeProductStatusByChannel_ProductCount)
+            acc[realOrFake!=0 ?'fakeCounts':'realCounts'].push(0);
           }else{
-            acc.fakeCounts[dupIndex] += val.FakeProductStatusByChannel_DiscriminantResult;
-            acc.realCounts[dupIndex] += val.FakeProductStatusByChannel_ProductCount;
+            acc[realOrFake==0 ?'fakeCounts':'realCounts'][dupIndex]+= val.FakeProductStatusByChannel_ProductCount;
           }
           return acc;
         },{

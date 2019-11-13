@@ -37,7 +37,7 @@
                 </div>
             </div>
         `,
-        props: ['id', 'model', 'viewModel', 'locale', 'lang'],
+        props: ['id', 'model', 'viewModel', 'locale', 'lang','refresh'],
         data: function(){
             return {
                 viewState: {
@@ -48,6 +48,15 @@
             };
         },
         watch: {
+            refresh:{
+                handler(newModel) {
+                    if(newModel){
+                        //当更换tab清除搜索值
+                        this.viewState.searchNeedle = '';
+                        this.$emit("resetRefresh");
+                    }
+                }
+            }
         },
         computed: {
             // 原数据过滤函数

@@ -20,6 +20,8 @@
                 <vc-tablix-with-tools 
                     :id="'tablix_with_tools__' + id" 
                     :model="model" :view-model="viewModel" 
+                    :refresh = "refresh"
+                    @resetRefresh = "resetRefresh"
                     :locale="locale" 
                     v-on:tools-button-clicked.native="onTablixToolsButtonClicked"
                     @tableviewModelChange="(query,opt)=>$emit('tableviewModelChange',query,opt)"></vc-tablix-with-tools>
@@ -31,7 +33,8 @@
                 viewState: {
                     selectedTab: "tab_all",
                     model4Tab: {}
-                }
+                },
+                refresh: false,
             };
         },
         watch: {
@@ -74,9 +77,15 @@
         },
         //### Methods
         methods: {
+            resetRefresh: function(){
+                this.refresh = false;
+            },
             onSelectTab: function(filter,tabid){
                 this.viewState.selectedTab = tabid;
+                // model.refreshSelectedRow只有在新的请求返回才会触发，比refresh慢，不过无视父子集好用！
                 this.model.refreshSelectedRow = true;
+                // refresh快速相应，现只传递到tablixwithtool
+                this.refresh = true;
                 this.$emit('tableviewModelChange', {
                     rp_status: filter? filter.RightsProtectionStatus: 0,
                     page: 1,
