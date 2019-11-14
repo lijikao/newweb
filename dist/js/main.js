@@ -1207,7 +1207,7 @@ var Helpers = (function (){
                 // refresh快速相应，现只传递到tablixwithtool
                 this.refresh = true;
                 this.$emit('tableviewModelChange', {
-                    rp_status: filter? filter.RightsProtectionStatus: 0,
+                    rp_status: filter? filter.RightsProtectionStatus: "",
                     page: 1,
                 });
             },
@@ -2375,7 +2375,7 @@ var Helpers = (function (){
           userid: "",
           page: "1",
           record_per_page: "10",
-          rp_status: "0",
+          rp_status: "",
           channelids: "",
           discrimnants: "",
           confidence: "",
@@ -2397,7 +2397,7 @@ var Helpers = (function (){
             tabs: [
               {
                 id: "tab_all",
-                filter: { RightsProtectionStatus: 0 },                
+                filter: { RightsProtectionStatus: '' },                
                 sum: 0,
                 default: true
               },
@@ -2945,6 +2945,9 @@ var Helpers = (function (){
                   return o.filter.RightsProtectionStatus === val.RightsProtectionStatus;
                 }
               );
+              if(correspondingTab === undefined) {
+                correspondingTab = that.viewModel.tableview.tabs[0];
+              }
               correspondingTab.sum = correspondingTab.id !='tab_all'? val['count(0)']:sumNumberOfAllTabs;
             })
             //chanel

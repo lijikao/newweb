@@ -87,7 +87,7 @@
                 // refresh快速相应，现只传递到tablixwithtool
                 this.refresh = true;
                 this.$emit('tableviewModelChange', {
-                    rp_status: filter? filter.RightsProtectionStatus: 0,
+                    rp_status: filter? filter.RightsProtectionStatus: "",
                     page: 1,
                 });
             },

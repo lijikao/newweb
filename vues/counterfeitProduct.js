@@ -204,7 +204,7 @@
           userid: "",
           page: "1",
           record_per_page: "10",
-          rp_status: "0",
+          rp_status: "",
           channelids: "",
           discrimnants: "",
           confidence: "",
@@ -226,7 +226,7 @@
             tabs: [
               {
                 id: "tab_all",
-                filter: { RightsProtectionStatus: 0 },                
+                filter: { RightsProtectionStatus: '' },                
                 sum: 0,
                 default: true
               },
@@ -774,6 +774,9 @@
                   return o.filter.RightsProtectionStatus === val.RightsProtectionStatus;
                 }
               );
+              if(correspondingTab === undefined) {
+                correspondingTab = that.viewModel.tableview.tabs[0];
+              }
               correspondingTab.sum = correspondingTab.id !='tab_all'? val['count(0)']:sumNumberOfAllTabs;
             })
             //chanel
