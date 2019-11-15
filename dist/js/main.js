@@ -1441,6 +1441,7 @@ var Helpers = (function (){
       });
       //获取列表
       let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/query/metric/commodity_test_report`;
+      console.log(window.requestQuery)
       $.ajax({
         url: reportUrl,
         type: "GET",
@@ -1829,7 +1830,7 @@ var Helpers = (function (){
                     userid: "",
                     page: 0,
                     record_per_page: "10",
-                    rp_status: "0",
+                    rp_status: "",
                     channelids: "",
                     discrimnants: "",
                     confidence: "",
@@ -1840,7 +1841,6 @@ var Helpers = (function (){
                 this.tableviewQuery.start_date = this.viewState.start_date?this.viewState.start_date:"2019-10-05 00:00:00";
                 this.tableviewQuery.end_date = this.viewState.end_date?this.viewState.end_date:"2019-10-10 00:00:00";
                 this.tableviewQuery.brand = window.brandData||"";
-                
                 if (opt&&opt.global) {
                   // temp global intervention for search or other query
                   globalQuery = {
@@ -1939,6 +1939,7 @@ var Helpers = (function (){
                     end_date: this.viewState.end_date,
                     brand: window.brandData,
                 }
+                window.requestQuery = requestQuery;
                 Object.assign(requestQuery,query); // mutate
                 $.ajax({
                     url:  `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/abnormal_shop_report`,

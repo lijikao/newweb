@@ -197,7 +197,7 @@
                     userid: "",
                     page: 0,
                     record_per_page: "10",
-                    rp_status: "0",
+                    rp_status: "",
                     channelids: "",
                     discrimnants: "",
                     confidence: "",
@@ -208,7 +208,6 @@
                 this.tableviewQuery.start_date = this.viewState.start_date?this.viewState.start_date:"2019-10-05 00:00:00";
                 this.tableviewQuery.end_date = this.viewState.end_date?this.viewState.end_date:"2019-10-10 00:00:00";
                 this.tableviewQuery.brand = window.brandData||"";
-                
                 if (opt&&opt.global) {
                   // temp global intervention for search or other query
                   globalQuery = {
@@ -307,6 +306,7 @@
                     end_date: this.viewState.end_date,
                     brand: window.brandData,
                 }
+                window.requestQuery = requestQuery;
                 Object.assign(requestQuery,query); // mutate
                 $.ajax({
                     url:  `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/abnormal_shop_report`,

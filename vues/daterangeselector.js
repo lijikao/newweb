@@ -175,6 +175,7 @@
       });
       //获取列表
       let reportUrl = `https://bps-mynodesql-api.blcksync.info:444/v0/query/metric/commodity_test_report`;
+      console.log(window.requestQuery)
       $.ajax({
         url: reportUrl,
         type: "GET",
