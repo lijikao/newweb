@@ -164,7 +164,6 @@
         feedbackTextarea: "",
         feedbackBtnId:0,
         feedbackOptions: [
-          
         ],
         balance:0,
         model: {
@@ -195,7 +194,7 @@
           key: "discrimination_report_paging",
           start_date: "",
           end_date: "",
-          industry: "1",
+          industry: "",
           category: "",
           brand: "",
           series: "",
@@ -716,6 +715,21 @@
             this.tableviewQuery[key] = query[key];
           });
         };
+
+        //
+        if(opt&&opt.filterChangeFlag) {
+          //TRAP: 接口属性名称总是不一样，一会儿负数一会儿不是
+          _parseInt = function(str) {
+            return str==''? '': parseInt(str);
+          };
+          that.requestTabAndDropdownData({
+            channelids: this.tableviewQuery['channelids'],
+            discrimnants:this.tableviewQuery['discrimnants'],
+            confidences:this.tableviewQuery['confidence']
+          },{
+            disableOptionsRefresh: true,
+          });
+        }
         let url = `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/commodity_test_report`;
         $.ajax({
           url:  url,
@@ -733,7 +747,6 @@
             that.tableviewModel.data = data;
             that.shutTableLoader();
             // 更新条目等数据
-            // that.requestTabAndDropdownData()
           },
           error: function(response) {
             alert("表格数据加载失败");
@@ -748,19 +761,26 @@
         this.viewModel.tableview.tableLoading = false;
       },
       // request new tab and control data list
-      requestTabAndDropdownData() {
+      requestTabAndDropdownData(req,opt={}) {
         let that = this;
         let url = `https://bps-mynodesql-api.blcksync.info:444/v1/query/metric/commodity_test_report`;
+        let data = {
+          key: "discrimination_report_filter",
+          start_date: that.viewState.start_date,
+          end_date: that.viewState.end_date,
+          brandids: window.brandData||"",
+          rp_status: "",
+          channelids: '',
+          discrimnants: '',
+          confidences: '',
+        };
+        if(req != undefined) {
+          Object.assign(data,req)
+        }
         $.ajax({
           url:  url,
           type: "GET",
-          data: {
-            key: "discrimination_report_filter",
-            start_date: that.viewState.start_date,
-            end_date: that.viewState.end_date,
-            brandids: window.brandData||"",
-            rp_status: ""
-          },
+          data: data,
           headers: {'Authorization': 'Bearer '+JSON.parse(localStorage.getItem("token")).val+''},
           changeOrigin: true,
           crossDomain: true,
@@ -769,16 +789,27 @@
             let sumNumberOfAllTabs = rex.results[0].reduce((acc,val) => {
               return acc+val['count(0)'];
             },0);
-            rex.results[0].forEach(function(val) {
-              let correspondingTab = _.find(that.viewModel.tableview.tabs, function(o) {
-                  return o.filter.RightsProtectionStatus === val.RightsProtectionStatus;
-                }
-              );
-              if(correspondingTab === undefined) {
-                correspondingTab = that.viewModel.tableview.tabs[0];
+            
+            let newTabNumberDisplay = [sumNumberOfAllTabs,0,0,0,0,0]
+
+            rex.results[0].forEach((val) => {
+              if(val.RightsProtectionStatus == 0) {
+                // 0 是真货，跳过
+                return;
               }
-              correspondingTab.sum = correspondingTab.id !='tab_all'? val['count(0)']:sumNumberOfAllTabs;
+              newTabNumberDisplay[val.RightsProtectionStatus] = val['count(0)'];
             })
+            that.viewModel.tableview.tabs.forEach((tab)=>{
+              if(tab.filter.RightsProtectionStatus === '') {
+                tab.sum = newTabNumberDisplay[0];
+                return;
+              }
+              tab.sum = newTabNumberDisplay[tab.filter.RightsProtectionStatus]
+            })
+            //如果disable，选择控件值将不会刷新。
+            if(opt.disableOptionsRefresh) {
+              return;
+            }
             //chanel
             that.viewModel.tableview.filters[0].options = rex.results[1].map(function(val) {
               // cache the channel name to use later in the graph
@@ -802,7 +833,7 @@
                 name: val.ConfidenceLevelBucketName,
                 value: val.ConfidenceLevelBucketName,
               }
-            });
+            });  
             console.log('------new tab data-------')
             console.log(rex.results)
           },

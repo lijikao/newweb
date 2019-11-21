@@ -108,7 +108,10 @@
                 //let filtersForCurrentTab = vwstate.filters[vwstate.selectedTab];
                 this.$emit('tableviewModelChange',{
                     // condition is for the "低风险" format： 1. number 2. "" empty 3. "中文"
-                    [this.mapFieldToRequestField(fieldid)]:Number.isNaN(Number.parseInt(fieldValue))&&fieldValue!=""?`\"${fieldValue}\"`:fieldValue
+                    [this.mapFieldToRequestField(fieldid)] : Number.isNaN(Number.parseInt(fieldValue))&&fieldValue!=""?`\"${fieldValue}\"`:fieldValue
+                },
+                {
+                    filterChangeFlag: true
                 });
             },
             onButtonClick: function (ev, callback) {
